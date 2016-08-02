@@ -1,0 +1,73 @@
+﻿
+@{
+    Layout = null;
+}
+@using WebApplication1.ViewModels
+@model EmployeeListViewModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetView</title>
+</head>
+<body>
+    <div> 
+        @*@{
+            //using ViewData传递数据
+            WebApplication1.Models.Employee emp = (WebApplication1.Models.Employee)
+                ViewData["Employee"];
+        }
+        <b>Employee Details </b><br />
+        Employee Name : @emp.FirstName@emp.LastName <br />
+        @if (emp.Salary > 15000)
+        {
+            <span style="background-color:yellow">
+               Employee Salary: @emp.Salary.ToString("C")
+            </span>
+        }
+        else
+        {
+            <span style="background-color:green">
+                Employee Salary: @emp.Salary.ToString("C")
+            </span>
+        }*@
+
+        @*<b>Employee Details </b><br />
+        Employee Name : @Model.FirstName @Model.LastName <br />
+        @if (Model.Salary > 15000)
+        {
+            <span style="background-color:yellow">
+                Employee Salary: @Model.Salary.ToString("C")
+            </span>
+        }
+        else
+        {
+            <span style="background-color:green">
+                Employee Salary: @Model.Salary.ToString("C")
+            </span>
+        }*@
+
+        @*<b>Employee Details</b><br />
+        Employee Name : @Model.EmployeeName <br />
+        <span style="background-color:@Model.SalaryColor">
+            Employee Salary: @Model.Salary
+        </span>*@
+
+        Hello @Model.UserName
+        <table>
+            <tr>
+                <th>Employee Name</th>
+                <th>Salary</th>
+            </tr>
+             @foreach (EmployeeViewModel item in Model.Employees)
+             {
+            <tr>
+                <td>@item.EmployeeName</td>
+                <td style="background-color:@item.SalaryColor">@item.Salary</td>
+            </tr>
+             }
+       </table>
+    </div>
+</body>
+</html>
