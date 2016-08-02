@@ -1,2 +1,2 @@
-# My-project
-C code C++ code java code
+# Demo
+this is a repository to store all the demo projects that using the MVC frameword
