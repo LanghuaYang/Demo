@@ -1,0 +1,12 @@
+﻿@model WebBlog.Models.Article
+@{
+    ViewBag.Title = "Details";
+}
+
+@{Html.RenderAction("PersonalPageSideBarTagsMenu", "PersonalPage", new { authorId = Model.AuthorId });}
+<h2>@Model.Title</h2>
+
+<em>@Model.Author.Name</em>
+
+@Model.Body
+

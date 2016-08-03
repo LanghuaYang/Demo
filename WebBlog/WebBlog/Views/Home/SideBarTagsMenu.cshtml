@@ -1,0 +1,15 @@
+﻿@model IEnumerable<WebBlog.Models.Tag>
+@{
+    ViewBag.Title = "SideBarTagsMenu";
+}
+<ul id="Tags">
+    @foreach (var tag in Model)
+    {
+        <li>
+            @Html.ActionLink(tag.Name,
+            "Browse", "Home",
+              new { tagname = tag.Name ,}, null)
+        </li>
+    }
+</ul>
+

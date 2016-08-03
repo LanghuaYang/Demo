@@ -1,0 +1,23 @@
+﻿@model WebBlog.Models.Tag
+
+@{ ViewBag.Title = "Browse Articles"; }
+
+@*@{Html.RenderAction("PersonalPageSideBarTagsMenu", "PersonalPage", new { authorId = Model.AuthorId });}*@
+<div class="tag">
+    <h3>
+        <em>@Model.Name</em> Articles
+    </h3>
+
+    <ul id="article-list">
+        @foreach (var article in Model.Articles)
+        {
+            <li>
+                <a href="@Url.Action("Details", "PersonalPage", new { authorId = article.AuthorId, articleId = article.ArticleId })">
+                    <span>@article.Title</span>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+
