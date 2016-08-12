@@ -86,14 +86,14 @@ namespace WebBlog.Migrations
 
             new List<Comment>
             {
-                new Comment { body = "The Best Of Men At Work", UserId = 1, IP = "127.2.2.1", ArticleId = 1, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 2, IP = "127.2.2.1", ArticleId = 2, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 1, IP = "127.2.2.1", ArticleId = 3, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 3, IP = "127.2.2.1", ArticleId = 4, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 5, IP = "127.2.2.1", ArticleId = 5, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 5, IP = "127.2.2.1", ArticleId = 6, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 1, IP = "127.2.2.1", ArticleId = 7, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
-                new Comment { body = "The Best Of Men At Work", UserId = 2, IP = "127.2.2.1", ArticleId = 8, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 1, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 2, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 3, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 4, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 5, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 6, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 7, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
+                new Comment { body = "The Best Of Men At Work", UserName = "laura", IP = "127.2.2.1", ArticleId = 8, CreateTime = new DateTime(2015, 12, 23, 09, 07, 12) },
             }.ForEach(a => context.Comments.Add(a));
 
             context.SaveChanges();

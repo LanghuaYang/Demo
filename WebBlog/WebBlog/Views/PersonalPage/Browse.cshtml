@@ -1,15 +1,15 @@
-﻿@model WebBlog.Models.Tag
+﻿@model IEnumerable<WebBlog.Models.Article>
 
 @{ ViewBag.Title = "Browse Articles"; }
 
-@*@{Html.RenderAction("PersonalPageSideBarTagsMenu", "PersonalPage", new { authorId = Model.AuthorId });}*@
+@{Html.RenderAction("PersonalPageSideBarTagsMenu", "PersonalPage", new { authorId = Model.ElementAt(0).AuthorId });}
 <div class="tag">
     <h3>
-        <em>@Model.Name</em> Articles
+        @*<em>@Model.Author.Name</em> Articles*@
     </h3>
 
     <ul id="article-list">
-        @foreach (var article in Model.Articles)
+        @foreach (var article in Model)
         {
             <li>
                 <a href="@Url.Action("Details", "PersonalPage", new { authorId = article.AuthorId, articleId = article.ArticleId })">

@@ -1,0 +1,19 @@
+﻿@model IEnumerable<WebBlog.Models.Comment>
+@{
+    ViewBag.Title = "Comment List";
+}
+
+<ul id="Tags">
+    @foreach (var comment in Model)
+    {
+        <li>
+            <em>@comment.UserName</em><B>@comment.IP</B><B>@comment.CreateTime</B>
+        </li>
+        <li>
+            @comment.body
+        </li>
+    }
+</ul> 
+    
+
+

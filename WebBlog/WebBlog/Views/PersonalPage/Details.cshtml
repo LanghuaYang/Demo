@@ -10,3 +10,7 @@
 
 @Model.Body
 
+@{Html.RenderAction("Index", "Comment", new { articleId = Model.ArticleId });}
+
+@{Html.RenderAction("Create", "Comment");}
+

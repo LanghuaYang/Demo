@@ -10,7 +10,7 @@ namespace WebBlog.Models
         public int CommentId { get; set; }
         public int ArticleId { get; set; }
         public string body { get; set; }
-        public int UserId { get; set; }
+        public string UserName { get; set; }
         public string IP { get; set; }
         public DateTime CreateTime { get; set; }
         public virtual Article Article { get; set; }
