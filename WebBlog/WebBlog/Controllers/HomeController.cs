@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebBlog.Models;
+
 
 namespace WebBlog.Controllers
 {
@@ -18,6 +20,7 @@ namespace WebBlog.Controllers
             //            where article.ArticleId == 2
             //            select new {article.ArticleId,article.Title,tag.TagId,tag.Name};
             //testing();
+            System.Linq.Expressions.Expression<Func<int, bool>> lambda = num => num >= 5;
             return View(articlelist);
         }
 

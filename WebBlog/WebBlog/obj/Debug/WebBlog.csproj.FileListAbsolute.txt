@@ -55,3 +55,4 @@ c:\users\acer\documents\visual studio 2013\Projects\WebBlog\WebBlog\obj\Debug\We
 c:\users\acer\documents\visual studio 2013\Projects\WebBlog\WebBlog\obj\Debug\WebBlog.pdb
 c:\users\acer\documents\visual studio 2013\Projects\WebBlog\WebBlog\obj\Debug\WebBlog.Migrations.InitialCreate.resources
 c:\users\acer\documents\visual studio 2013\Projects\WebBlog\WebBlog\obj\Debug\WebBlog.csproj.GenerateResource.Cache
+C:\Users\Acer\documents\visual studio 2013\Projects\WebBlog\WebBlog\obj\Debug\WebBlog.Migrations.WebBlog20160803.resources

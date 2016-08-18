@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebBlog.Models;
+using WebBlog.Utilities;
+using System.Drawing;
 
 namespace WebBlog.Controllers
 {
@@ -149,6 +151,12 @@ namespace WebBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            if (TempData["VerificationCode"] == null || TempData["VerificationCode"].ToString() != model.VerificationCode.ToUpper())
+            {
+                ModelState.AddModelError("VerificationCode", "The verification code is not correct");
+                return View(model);
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -420,6 +428,24 @@ namespace WebBlog.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        //[HttpGet]
+        //public ActionResult VerifyCodeImage()
+        //{
+        //    string strCode = string.Empty;
+        //    byte[] buffer = Verifycode.Create(6, out strCode);
+        //    Session["code"] = strCode;
+        //    return File(buffer, @"image/jpeg");
+        //}
+        [AllowAnonymous]
+        public ActionResult VerificationCode()
+        {
+            string verificationCode = Verifycode.CreateVerificationText(6);
+            Bitmap _img = Verifycode.CreateVerificationImage(verificationCode, 160, 30);
+            _img.Save(Response.OutputStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            TempData["VerificationCode"] = verificationCode.ToUpper();
+            return null;
         }
 
         #region Helpers

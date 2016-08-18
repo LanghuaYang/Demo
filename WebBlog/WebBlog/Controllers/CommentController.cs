@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBlog.Models;
+using System.ComponentModel;
 
 namespace WebBlog.Controllers
 {
@@ -22,24 +23,33 @@ namespace WebBlog.Controllers
             return PartialView(comments.ToList<Comment>());
         }
 
-        [Authorize]
-        public ActionResult Create()
-        {
-            return PartialView(); 
-        }
 
-        // POST: Post/Create
+        //public ActionResult Create()
+        //{
+        //    return PartialView();
+        //}
+
+         //POST: Post/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public ActionResult Create(Comment comment)
         {
+            //HttpRequest
+            //HttpResponse   
+            //HttpRuntime
+            //HttpApplication
+            //System.ComponentModel.Component;
+            //System.Web.IHttpModule
+            //System.Web.HttpApplication
+            //HttpWorkerRequest
             if (ModelState.IsValid)
             {
                 comment.CreateTime = System.DateTime.Now;
                 comment.IP = Request.UserHostAddress;
                 comment.UserName = User.Identity.Name;
-                Comment c = new Comment(){
+                Comment c = new Comment()
+                {
                     CommentId = comment.CommentId,
                     Article = db.Articles.Single(a => a.ArticleId == comment.ArticleId),
                     body = comment.body,
@@ -51,8 +61,7 @@ namespace WebBlog.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", "Comment", new { articleId = comment.ArticleId });
             }
-
-            return PartialView();
+            return View();// Json();
         }
     }
 }

@@ -159,15 +159,21 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonalPageController.cs" />
+    <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201608022321472_InitialCreate.cs" />
     <Compile Include="Migrations\201608022321472_InitialCreate.Designer.cs">
       <DependentUpon>201608022321472_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608110900418_WebBlog-20160803.cs" />
+    <Compile Include="Migrations\201608110900418_WebBlog-20160803.Designer.cs">
+      <DependentUpon>201608110900418_WebBlog-20160803.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -181,6 +187,8 @@
     <Compile Include="Models\WebBlogDBContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\VerifyCode.cs" />
+    <Compile Include="ViewModels\NewPost.cs" />
     <Compile Include="ViewModels\PersonalTag.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +201,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\LanghuaYangWebBlog01.pubxml" />
+    <None Include="Properties\PublishProfiles\WebBlog20160815122723 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\WebBlog20160815123709 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -246,6 +256,13 @@
     <Content Include="Views\PersonalPage\PersonalPageSideBarTagsMenu.cshtml" />
     <Content Include="Views\PersonalPage\Browse.cshtml" />
     <Content Include="Views\PersonalPage\Details.cshtml" />
+    <Content Include="Views\Post\Create.cshtml" />
+    <Content Include="Views\Post\Delete.cshtml" />
+    <Content Include="Views\Post\Details.cshtml" />
+    <Content Include="Views\Post\Edit.cshtml" />
+    <Content Include="Views\Post\Index.cshtml" />
+    <Content Include="Views\Comment\Index.cshtml" />
+    <Content Include="Views\Comment\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -260,6 +277,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201608022321472_InitialCreate.resx">
       <DependentUpon>201608022321472_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608110900418_WebBlog-20160803.resx">
+      <DependentUpon>201608110900418_WebBlog-20160803.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -79,6 +79,11 @@ namespace WebBlog.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [StringLength(6, MinimumLength = 6, ErrorMessage = "The verification code is not correct")]
+        [Display(Name = "Verification Code")]
+        public string VerificationCode { get; set; }
     }
 
     public class ResetPasswordViewModel
