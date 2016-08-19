@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Auckland_High_School.Models.Subject>
+@{
+    ViewBag.Title = "SubjectList";
+}
+
+<h2>SubjectList</h2>
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+    </tr>
+    @foreach (var s in Model)
+    {
+        <tr>
+            <td>
+                @s.Name
+            </td>
+        </tr>
+    }
+</table>
+@Html.ActionLink("Back To Home Page", "Index", "Home")
