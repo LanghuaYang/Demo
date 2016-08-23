@@ -12,5 +12,9 @@
 
 @{Html.RenderAction("Index", "Comment", new { articleId = Model.ArticleId });}
 
-@{Html.RenderAction("Create", "Comment");}
+@*@{Html.RenderAction("Create", "Comment");}*@
+@Html.Partial("~/Views/Comment/Create.cshtml", new WebBlog.Models.Comment() { ArticleId = Model.ArticleId })
+
+
+
 

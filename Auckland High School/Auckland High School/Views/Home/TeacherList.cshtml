@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Auckland_High_School.Models.Teacher>
+﻿@model IEnumerable<Auckland_High_School.ViewModel.TeacherViewModel>
 @{
     ViewBag.Title = "TeacherList";
 }
@@ -12,6 +12,12 @@
         <th>
             Gender
         </th>
+        <th>
+            TotalSubject
+        </th>
+        <th>
+            TotalClass
+        </th>
     </tr>
     @foreach (var s in Model)
     {
@@ -20,8 +26,14 @@
                 @s.FirstName  @s.LastName
             </td>
             <td>
-                @s.gender
+                @s.Gender
             </td>
+            <td>
+                @s.TotalSubject
+            </td>
+            <td>
+                @s.TotalClass
+            </td>  
         </tr>
     }
 </table>

@@ -20,11 +20,12 @@ namespace WebBlog.Controllers
         public ActionResult Create()
         {
             var tags = db.Tags.Select(c => new
+            TagViewModel()
             {
                 TagId = c.TagId,
                 Name = c.Name
             }).ToList();
-            ViewBag.Tags = new MultiSelectList(tags, "TagId", "Name");
+            ViewBag.Tags = (List<TagViewModel>)tags;
             return View();
         }
 
@@ -33,10 +34,14 @@ namespace WebBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ArticleId,AuthorId,Title,Body,PublishTime,Author,Tags")]Article article) 
+        public ActionResult Create(NewPost post) 
         {
             if (ModelState.IsValid)
             {
+                var article = new Article() { 
+                Title = post.Title,
+                Body = post.Body,};
+                // add author 
                 article.Author = db.Authors.SingleOrDefault(n => n.Name == User.Identity.Name);
                 if (article.Author == null)
                 {
@@ -45,6 +50,16 @@ namespace WebBlog.Controllers
                     article.Author = author;
                 }
                 article.PublishTime = System.DateTime.Now;
+                //add tags
+                if (post.tags != null)
+                {
+                    article.Tags = new List<Tag>();
+                    foreach (var tagid in post.tags)
+                    {
+                        var tag = db.Tags.SingleOrDefault(n => n.TagId == tagid);
+                        article.Tags.Add(tag);
+                    }
+                }
                 db.Articles.Add(article);
                 db.SaveChanges();
                 return RedirectToAction("Index", "PersonalPage", new { author = User.Identity.Name });

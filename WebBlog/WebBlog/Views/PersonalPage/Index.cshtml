@@ -2,6 +2,7 @@
 
 @{ ViewBag.Title = "Browse Personalpage Articles"; }
 
+@*由于sidebar里的数据是通过db获得的，所以应该用RenderAction而不是partial*@
 @{Html.RenderAction("PersonalPageSideBarTagsMenu", "PersonalPage", new { authorId = Model.AuthorId });}
 <div class="tag">
     <h3>

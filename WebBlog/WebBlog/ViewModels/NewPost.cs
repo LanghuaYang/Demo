@@ -11,6 +11,6 @@ namespace WebBlog.ViewModels
         //public int AuthorId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
-        public List<string> tags { get; set; }
+        public List<int> tags { get; set; }
     }
 }

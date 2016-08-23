@@ -1,4 +1,4 @@
-﻿@model WebBlog.Models.Article
+﻿@model WebBlog.ViewModels.NewPost
 
 @{
     ViewBag.Title = "Create";
@@ -15,10 +15,10 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Tags, "Tags", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.tags, "Tags", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("TagId", (MultiSelectList)ViewBag.Tags, new { multiple = "multiple" })
-                @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+                @Html.ListBoxFor(m => m.tags, new SelectList(ViewBag.Tags, "TagId", "Name"))
+                @Html.ValidationMessageFor(model => model.tags, "", new { @class = "text-danger" })
             </div>
         </div>
 

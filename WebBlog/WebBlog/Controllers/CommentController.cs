@@ -24,10 +24,10 @@ namespace WebBlog.Controllers
         }
 
 
-        //public ActionResult Create()
-        //{
-        //    return PartialView();
-        //}
+        public ActionResult Create()
+        {
+            return PartialView();
+        }
 
          //POST: Post/Create
         [HttpPost]
