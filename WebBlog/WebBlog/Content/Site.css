@@ -1,14 +1,128 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿#header {
+    margin-left: 10px;
+    margin-right: 10px;
 }
-
+.h_r_3 {
+    margin: 0 1px;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    border-bottom: 1px solid #d8dfea;
+}
+.h_r_2 {
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+    border-left: 2px solid #d8dfea;
+    border-right: 1px solid #d8dfea;
+    margin: 0 1px;
+}
+.h_r_1 {
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+    border-left: 2px solid #d8dfea;
+    border-right: 1px solid #d8dfea;
+}
+#header_block {
+    border-left: 1px solid #d8dfea;
+    border-right: 1px solid #d8dfea;
+    height: 65px;
+}
+#logo {
+    position: absolute;
+    left: 18px;
+    top: 10px;
+}
+#nav_menu {
+    margin: 8px 7px 0 10px;
+    padding: 0;
+    height: 30px;
+    line-height: 30px;
+}
+body {
+    font-size: 12px;
+    font-family: Helvetica,Verdana,Arial,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+#main {
+    padding: 0;
+    margin: 10px 320px 0 180px;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
+#post_list {
+    margin-top: 0;
+    padding-left: 5px;
+    padding-right: 0;
+    padding-top: 10px;
+    min-height: 300px;
+    position:absolute;
+    left:250px;
+}
 
+.post_item {
+    border-bottom: 1px dotted #ccc;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    border-bottom-color: rgb(204, 204, 204);
+    border-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+a.titlelnk:visited {
+    color: #551a8b;
+}
+a.titlelnk:link, a.titlelnk:active {
+    color: #105cb6;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#post_list.post_item_summary {
+    line-height: 1.8em;
+    margin-bottom: 5px;
+    color: #333;
+    overflow: hidden;
+    padding-right: 5px;
+    font-size: 12px;
+    padding-top: 5px;
+}
+.post_item_foot {
+    color: #555;
+    padding-top: 5px;
+    margin-left: 10px;
+}
+a.lightblue:link, a.lightblue:active, a.lightblue:visited {
+    color: #005a94;
+    text-decoration: none;
+}
+#side_nav {
+    position: absolute;
+    left: 10px;
+    top: 142px;
+    width: 160px;
+    margin-top: 0;
+    padding-top: 0;
+    background-color: #eef;
+}
+
+#cate_title_block {
+    position: relative;
+}
+#cate_item {
+    border-left: 4px solid #146eb4;
+    border-right: 1px solid #83abc6;
+}
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -21,4 +135,15 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+#footer {
+    margin-left: 180px;
+    margin-right: 320px;
+}
+
+#footer_bottom {
+    text-align: center;
+    margin-top: 15px;
+    padding-bottom: 20px;
 }

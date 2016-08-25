@@ -3,15 +3,30 @@
     ViewBag.Title = "Index";
 }
 @{Html.RenderAction("SideBarTagsMenu", "Home");}
-<h2>Index</h2>
-<ui>
+
+
+<div id="post_list">
+    <h2>All The Articles</h2>
+
     @foreach (var article in Model)
     {
-        <li>
-            <a href="@Url.Action("Details", "PersonalPage", new { authorId = article.AuthorId, articleId = article.ArticleId })">
-                <span>@article.Title</span>
-            </a>
-        </li>
+        <div class="post_item">
+            <h3>
+                <a class="titlelnk" href="@Url.Action("Details", "PersonalPage", new { authorId = article.AuthorId, articleId = article.ArticleId })">
+                    @article.Title
+                </a>
+            </h3>
+            <p class="post_item_summary">
+                @article.Body
+            </p>
+            <div class="post_item_foot">
+                <a class="lightblue" href="@Url.Action("Browse", "PersonalPage", new { authorId = article.AuthorId, tagname = "" })">
+                    @article.Author.Name
+                </a>Published at @article.PublishTime
+            </div>
+        </div>
     }
-</ui>
+</div>
+
+
 

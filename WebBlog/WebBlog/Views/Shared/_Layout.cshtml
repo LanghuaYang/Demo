@@ -9,8 +9,25 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div id="header">
+        <p class="h_r_3"></p>
+        <p class="h_r_2"></p>
+        <p class="h_r_1"></p>
+        <div id="header_block">
+            <div id="logo">
+                <h1>
+                    <a href="@Url.Action("Index", "Home")" title="Programming Changing The World!">
+                        <img src="~/Content/imgs/logo_small.gif" alt="Blog Website LOGO" width="142" height="55">
+                        <span style="color:darkblue">Programming Changing The World!</span>
+                    </a>
+                </h1>
+            </div>
+        </div>
+        <p class="h_r_1"></p>
+        <p class="h_r_2"></p>
+        <p class="h_r_3"></p>
+    </div>
+    <div id="nav_menu">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -28,20 +45,21 @@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
-        </div>
     </div>
     @*only used by home controller*@
     @*@{Html.RenderAction("SideBarTagsMenu", "Home");}*@
-    <div class="container body-content">
+    <div id="main">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    @*<footer id="footer">
+        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </footer>*@
 </body>
+
 </html>

@@ -21,12 +21,24 @@ namespace WebBlog.Controllers
         //PersonalPage/Browse?tag=C#
         public ActionResult Browse(int authorId,string tagname)
         {
-            var articlelist = from author in db.Authors
-                                join article in db.Articles on author.AuthorId equals article.AuthorId
-                                from tag in article.Tags
-                                where(author.AuthorId == authorId && tag.Name == tagname)
-                                select (article);
-            return View(articlelist);
+            //tagname == "" means to return all the articles of the author
+            if (tagname == "")
+            {
+                var articlelist = from author in db.Authors
+                                  join article in db.Articles on author.AuthorId equals article.AuthorId
+                                  where (author.AuthorId == authorId)
+                                  select (article);
+                return View(articlelist);
+            }
+            else 
+            {
+                var articlelist = from author in db.Authors
+                                  join article in db.Articles on author.AuthorId equals article.AuthorId
+                                  from tag in article.Tags
+                                  where (author.AuthorId == authorId && tag.Name == tagname)
+                                  select (article);
+                return View(articlelist);
+            }
         }
 
         public ActionResult Details(int authorId, int articleId)

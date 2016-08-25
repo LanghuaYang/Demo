@@ -3,17 +3,19 @@
     ViewBag.Title = "PersonalSideBarTagsMenu";
 }
 
-<div class="col-md-3">
-    <h2>Categories</h2>
-    <ul id="Tags" class="nav nav-tabs nav-stacked">
-        @foreach (var tag in Model)
-        {
-            <li>
-                @Html.ActionLink(tag.Name,
+<div id="side_nav">
+    <div id="cate_title_block">
+        <h2>Categories</h2>
+        <ul id="cate_item" class="nav nav-tabs nav-stacked">
+            @foreach (var tag in Model)
+            {
+                <li>
+                    @Html.ActionLink(tag.Name,
             "Browse", "PersonalPage",
                   new { authorId = tag.AuthorId, tagname = tag.Name }, null)
-            </li>
-        }
-    </ul>
-</div>
+                </li>
+            }
+        </ul>
+        </div>
+    </div>
 

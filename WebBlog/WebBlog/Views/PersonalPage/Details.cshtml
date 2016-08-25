@@ -7,9 +7,9 @@
 <h2>@Model.Title</h2>
 
 <em>@Model.Author.Name</em>
-
+<article>
 @Model.Body
-
+</article>
 @{Html.RenderAction("Index", "Comment", new { articleId = Model.ArticleId });}
 
 @*@{Html.RenderAction("Create", "Comment");}*@
