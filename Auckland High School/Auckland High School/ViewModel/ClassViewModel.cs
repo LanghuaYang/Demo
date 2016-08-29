@@ -7,6 +7,7 @@ namespace Auckland_High_School.ViewModel
 {
     public class ClassViewModel
     {
+        public int ClassId { get; set; }
         public string Name { get; set; }
         public string Subject { get; set; }
         public string FirstName { get; set; }

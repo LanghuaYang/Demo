@@ -2,9 +2,8 @@
     ViewBag.Title = "Home Page";
 }
 
-<li>
-    <a href="@Url.Action("SubjectList", "Home")">Subject</a>
-    <a href="@Url.Action("StudentList", "Home")">Student</a>
-    <a href="@Url.Action("TeacherList", "Home")">Teacher</a>
-    <a href="@Url.Action("ClassList", "Home")">Class</a>
-</li>
+
+    <a href="@Url.Action("Index", "Subject")" class="btn-default">Subject</a>
+    <a href="@Url.Action("Index", "Student")" class="btn-default">Student</a>
+    <a href="@Url.Action("Index", "Teachers")" class="btn-default">Teacher</a>
+    <a href="@Url.Action("Index", "Class")" class="btn-default">Class</a>

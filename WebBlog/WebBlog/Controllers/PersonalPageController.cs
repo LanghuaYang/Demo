@@ -14,7 +14,7 @@ namespace WebBlog.Controllers
         //PersonalPage/Index?author=xxx
         public ActionResult Index(string author)
         {
-            var articlelist = db.Authors.Include("Articles").Single(a => a.Name == author);
+            var articlelist = db.Authors.Include("Articles").Include("Author").Single(a => a.Name == author);
             return View(articlelist);
         }
 
@@ -22,18 +22,17 @@ namespace WebBlog.Controllers
         public ActionResult Browse(int authorId,string tagname)
         {
             //tagname == "" means to return all the articles of the author
-            if (tagname == "")
+            if (tagname == null)
             {
-                var articlelist = from author in db.Authors
-                                  join article in db.Articles on author.AuthorId equals article.AuthorId
-                                  where (author.AuthorId == authorId)
-                                  select (article);
+                var articlelist = from article in db.Articles.Include("Author")
+                                  where article.AuthorId == authorId
+                                  select article;
                 return View(articlelist);
             }
             else 
             {
                 var articlelist = from author in db.Authors
-                                  join article in db.Articles on author.AuthorId equals article.AuthorId
+                                  join article in db.Articles.Include("Author") on author.AuthorId equals article.AuthorId
                                   from tag in article.Tags
                                   where (author.AuthorId == authorId && tag.Name == tagname)
                                   select (article);

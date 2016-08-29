@@ -14,13 +14,7 @@ namespace WebBlog.Controllers
         WebBlogDBContext db = new WebBlogDBContext();
         public ActionResult Index()
         {
-            var articlelist = db.Articles.Take(10).ToList();
-            //var query = from article in db.Articles
-            //            from tag in article.Tags
-            //            where article.ArticleId == 2
-            //            select new {article.ArticleId,article.Title,tag.TagId,tag.Name};
-            //testing();
-            System.Linq.Expressions.Expression<Func<int, bool>> lambda = num => num >= 5;
+            var articlelist = db.Articles.Include("Author").Take(10).ToList();
             return View(articlelist);
         }
 
@@ -76,14 +70,14 @@ namespace WebBlog.Controllers
         //Home/Browse?tag=C#
         public ActionResult Browse(string tagname)
         {
-            var articlelist = db.Tags.Include("Articles").Single(t => t.Name == tagname);
+            var articlelist = db.Tags.Include("Articles").Include("Author").SingleOrDefault(t => t.Name == tagname);
             return View(articlelist);
         }
 
         [ChildActionOnly]
         public ActionResult SideBarTagsMenu()
         {
-            var taglist = db.Tags.ToList();
+            var taglist = db.Tags.OrderBy(a => a.Name).ToList();
             return PartialView(taglist);
         }
     }

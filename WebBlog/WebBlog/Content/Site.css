@@ -28,6 +28,7 @@
     border-left: 1px solid #d8dfea;
     border-right: 1px solid #d8dfea;
     height: 65px;
+    background: url(/Content/imgs/logo_small.gif) no-repeat;
 }
 #logo {
     position: absolute;
@@ -106,14 +107,18 @@ a.lightblue:link, a.lightblue:active, a.lightblue:visited {
     color: #005a94;
     text-decoration: none;
 }
+
 #side_nav {
     position: absolute;
     left: 10px;
-    top: 142px;
+    top: 175px;
     width: 160px;
     margin-top: 0;
     padding-top: 0;
     background-color: #eef;
+}
+#side_description {
+    position: relative;
 }
 
 #cate_title_block {

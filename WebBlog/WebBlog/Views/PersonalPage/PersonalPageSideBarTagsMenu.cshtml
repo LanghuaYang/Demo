@@ -4,18 +4,24 @@
 }
 
 <div id="side_nav">
-    <div id="cate_title_block">
-        <h2>Categories</h2>
-        <ul id="cate_item" class="nav nav-tabs nav-stacked">
-            @foreach (var tag in Model)
-            {
-                <li>
-                    @Html.ActionLink(tag.Name,
+        <div id="side_description">
+            <h5>Name:</h5>
+            <h5>Age:</h5>
+            <h5>Articles Count:</h5>
+            <h5>Comments Count:</h5>
+        </div>
+        <div id="cate_title_block">
+            <h2>Categories</h2>
+            <ul id="cate_item" class="nav nav-tabs nav-stacked">
+                @foreach (var tag in Model)
+                {
+                    <li>
+                        @Html.ActionLink(tag.Name,
             "Browse", "PersonalPage",
                   new { authorId = tag.AuthorId, tagname = tag.Name }, null)
-                </li>
-            }
-        </ul>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 

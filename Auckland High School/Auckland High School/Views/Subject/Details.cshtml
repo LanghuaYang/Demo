@@ -1,0 +1,51 @@
+﻿@model Auckland_High_School.ViewModel.SubjectViewModel
+
+    @{
+        ViewBag.Title = "Details";
+    }
+
+    <h2>Details</h2>
+<div>
+    <h2>Subject</h2>
+    <h3>@Model.Name</h3>
+    <h3>Teacher List</h3>
+     <ul>
+@if (Model.Staffs != null)
+{
+        foreach (var item in Model.Staffs)
+        {
+        <li>
+            @item.FirstName @item.LastName
+        </li>
+        }
+}
+     </ul>
+        <h3>Class List</h3>
+    <ul>
+@if (Model.Classes != null)
+{
+        foreach (var item in Model.Classes)
+        {
+            <li>
+                @item.Name
+            </li>
+        }
+}
+    </ul>
+        <h3>Enrollment List</h3>
+    <ul>
+        @if (Model.Enrollments != null)
+        {
+            foreach (var item in Model.Enrollments)
+            {
+                <li>
+                    @item.FirstName @item.LastName
+                </li>
+            }
+        }
+    </ul>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.SubjectId }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+</div>

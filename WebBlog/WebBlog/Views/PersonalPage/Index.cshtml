@@ -6,10 +6,9 @@
 @{Html.RenderAction("PersonalPageSideBarTagsMenu", "PersonalPage", new { authorId = Model.AuthorId });}
 
 
-
 <div id="post_list">
     <h3>
-        <em>@Model.Name</em> Articles
+        <em>@Model.Name 's</em> Articles
     </h3>
 
     @foreach (var article in Model.Articles)
