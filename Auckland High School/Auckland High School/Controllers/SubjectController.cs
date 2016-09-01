@@ -70,6 +70,16 @@ namespace Auckland_High_School.Controllers
                                 TotalEnrollment = e.EnrollmentCount
                             }).ToList();
 
+            //var viewModel = db.Subject
+            //    .Select(x => new SubjectViewModel
+            //    {
+            //        SubjectId = x.Id,
+            //        Subjects = x.Name,
+            //        NumberOfStaffs = x.Class.Select(y => y.Teacher.Id).Distinct().Count(),
+            //        NumberOfClasses = x.Class.Select(y => y.Id).Distinct().Count(),
+            //        NumberOfEnrolments = x.Class.SelectMany(y => y.Enrolment.Select(z => z.Id)).Distinct().Count()
+            //    }).ToList();
+
             return View(subjects);
         }
 
@@ -191,25 +201,24 @@ namespace Auckland_High_School.Controllers
                           C = x.Select(g => g.cla)
                       }).ToList();
 
+
             if(st.Count() > 0)
             {
                 foreach (var item in st)
                 {
-                    //var student = db.Students.SingleOrDefault( x => x.StudentId == item.S.StudentId);
                     foreach (var j in item.C)
                     {
                         item.S.classes.Remove(j);
-                        //student.classes.Remove(j);
                     }
                 }
             }
             //remove the classes belongs to the subject
-            var cl = db.Classes.Where(x => x.SubjectId == id);
+            var cl = db.Classes.Where(x => x.SubjectId == id).ToList();
             if (cl.Count() > 0)
             {
                 foreach (var item in cl)
-                { 
-                    
+                {
+                    cl.Remove(item);
                 }
             }
             //remove the subject
