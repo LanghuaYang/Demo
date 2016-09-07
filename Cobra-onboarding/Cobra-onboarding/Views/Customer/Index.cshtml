@@ -3,47 +3,70 @@
     ViewBag.Title = "Home Page";
 }
 
-<p>
-    @Html.ActionLink("Create New", "Create", new { @class = "btn btn-primary glyphicon glyphicon-plus" })
-</p>
-<table class="table-striped">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address2)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.City)
-        </th>
-        <th></th>
-    </tr>
+    <div ng-app="myApp" class="ng-cloak" ng-controller="customersCtrl">
+        <hr>
+        <button class="btn btn-success" ng-click="editUser('new')">
+            <span class="glyphicon glyphicon-user"></span>Create New
+        </button>
+        <hr>
+        <h3 ng-show="edit">Create New:</h3>
+        <h3 ng-hide="edit">Edit User:</h3>
+        <form name="frmCustomer" novalidate>
+            <div>
+                <label>Customer Name</label>
+                <input type="text" ng-model="Customer.Name"  name="cname" placeholder="" required ng-minlength="4" ng-maxlength="14" />
+            </div>
+            <div>
+                <label>Address1</label>
+                <input type="text" ng-model="Customer.Address1"  name="address1" placeholder="" required />
+            </div>
+            <div>
+                <label>Address2</label>
+                <input type="text" ng-model="Customer.Address2"  name="address2" placeholder="" />
+            </div>
+            <div>
+                <label>City</label>
+                <input type="text" ng-model="Customer.City"  name="city" placeholder="" required />
+            </div>
+            <div class="btn">
+                <button class="btn btn-success" ng-click="UpdateUser()"> @*ng-disabled="error || incomplete">*@
+                    <span class="glyphicon glyphicon-save"></span>Update User
+                </button>
+            </div>
+        </form>
+        <hr />
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning glyphicon glyphicon-pencil" }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-info glyphicon glyphicon-align-justify" }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
-            </td>
-        </tr>
-    }
+        <h2>All Customers</h2>
+        <table class="table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Address1</th>
+                <th>Address2</th>
+                <th>City</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="custModel in ListCustomer">
+                <td>{{ custModel.Name }}</td>
+                <td>{{ custModel.Address1 }}</td>
+                <td>{{ custModel.Address2 }}</td>
+                <td>{{ custModel.City }}</td>
+                <td>
+                    <a href="#" ng-click="editUser(custModel.Id)" title="Edit Record" class="btn-primary glyphicon glyphicon-pencil">Edit</a>
+                </td>
+                <td>
+                    <a href="#" ng-click="getDetails(custModel)" title="Details" class="btn-warning glyphicon glyphicon-align-justify">Details</a>
+                </td>
+                <td>
+                    <a href="#" ng-click="deleteCustomer(custModel)" title="Delete Record" class="btn-danger glyphicon glyphicon-trash">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-</table>
+@section scripts
+{
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/ScriptsNg/CustomerController.js"></script>
+}

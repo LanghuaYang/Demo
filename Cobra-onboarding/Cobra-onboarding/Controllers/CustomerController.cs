@@ -13,27 +13,99 @@ namespace Cobra_onboarding.Controllers
 {
     public class CustomerController : Controller
     {
-        private Entities db = new Entities();
+        private CobraDBContext db = new CobraDBContext();
 
-        // GET: Customer
         public ActionResult Index()
         {
-            return View(db.People.ToList());
+            return View();
         }
 
-        // GET: Customer/Details/5
-        public ActionResult Details(int? id)
+        [HttpGet]
+        public JsonResult GetAllData()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Person person = db.People.Find(id);
-            if (person == null)
-            {
-                return HttpNotFound();
-            }
+            //序列化类型为
+            //“System.Data.Entity.DynamicProxies.OrderHeader_46903D1AB62AB2D49CE800A1B995BF8A62AD4475430B76E9131CF80246D19F91”
+            //的对象时检测到循环引用。
+            //for bugfix
+            var customers = from c in db.People
+                            select new
+                            {
+                                Id = c.Id,
+                                Name = c.Name,
+                                Address1 = c.Address1,
+                                Address2 = c.Address2,
+                                City = c.City
+                            };
+            return Json(customers, JsonRequestBehavior.AllowGet);
+        }
 
+        // GET: Get Single Customer
+        [HttpGet]
+        public JsonResult GetbyID(int id)
+        {
+            object customer = db.People.Find(id);
+            return Json(customer, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: Save New Customer
+        [HttpPost]
+        public JsonResult Insert(Person person)
+        {
+            bool status = false;
+            if (ModelState.IsValid)
+            {
+                db.People.Add(person);
+                db.SaveChanges();
+                return Json(new { success = status });
+            }
+            return Json(new
+            {
+                success = false,
+                errors = ModelState.Keys.SelectMany(i => ModelState[i].Errors).Select(m => m.ErrorMessage).ToArray()
+            });
+        }
+
+        // POST: Update Existing Customer
+        [HttpPost]
+        public JsonResult Update(Person person)
+        {
+            bool status = false;
+            if (ModelState.IsValid)
+            {
+                db.Entry(person).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = status });
+            }
+            return Json(new
+            {
+                success = false,
+                errors = ModelState.Keys.SelectMany(i => ModelState[i].Errors).Select(m => m.ErrorMessage).ToArray()
+            });
+        }
+
+        // DELETE: Delete Customer
+        [HttpDelete]
+        public JsonResult Delete(int id)
+        {
+            bool status = false;
+            Person person = db.People.Find(id);
+            //remove the orderdetails
+            //remove the orderheader
+            db.People.Remove(person);
+            db.SaveChanges();
+            status = true;
+            return Json(new
+            {
+                success = status
+            });
+        }
+
+
+        // GET: Customer/Details/5
+        [HttpGet]
+        public JsonResult Details(int? id)
+        {
+            Person person = db.People.Find(id);
             var ordertotal = ((from o in db.OrderHeaders.Where(x => x.PersonId == id)
                               select new
                               {
@@ -46,91 +118,7 @@ namespace Cobra_onboarding.Controllers
                                   ProductCount = g.Key.OrderDetails.Select(S => S.Product.Id).Count(),
                                   Products = g.Key.OrderDetails.Select( p => p.Product).ToList(),
                               })).ToList();
-
-
-            return View(ordertotal);
-        }
-
-        // GET: Customer/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Customer/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Address1,Address2,City")] Person person)
-        {
-            if (ModelState.IsValid)
-            {
-                db.People.Add(person);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(person);
-        }
-
-        // GET: Customer/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Person person = db.People.Find(id);
-            if (person == null)
-            {
-                return HttpNotFound();
-            }
-            return View(person);
-        }
-
-        // POST: Customer/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Address1,Address2,City")] Person person)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(person).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(person);
-        }
-
-        // GET: Customer/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Person person = db.People.Find(id);
-            if (person == null)
-            {
-                return HttpNotFound();
-            }
-            return View(person);
-        }
-
-        // POST: Customer/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Person person = db.People.Find(id);
-            //remove the orderdetails
-            //remove the orderheader
-            db.People.Remove(person);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(ordertotal,JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

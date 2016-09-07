@@ -12,7 +12,7 @@ namespace Cobra_onboarding.Controllers
 {
     public class ProductController : Controller
     {
-        private Entities db = new Entities();
+        private CobraDBContext db = new CobraDBContext();
 
         // GET: Product
         public ActionResult Index()
