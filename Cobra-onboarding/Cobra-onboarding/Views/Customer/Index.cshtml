@@ -35,34 +35,91 @@
             </div>
         </form>
         <hr />
+        @*<tt>option = {{Customer}}</tt><br />*@
 
         <h2>All Customers</h2>
-        <table class="table-striped">
+        <table class="table">
             <tr>
-                <th>Name</th>
-                <th>Address1</th>
-                <th>Address2</th>
-                <th>City</th>
+                <th>
+                    <a ng-click="Sort('Name')">Name</a>
+                    <span class="sortorder" ng-show="propertyName === 'Name'" ng-class="{reverse: reverse}"></span>
+                </th>
+                <th>
+                    <a ng-click="Sort('Address1')">Address1</a>
+                    <span class="sortorder" ng-show="propertyName === 'Address1'" ng-class="{reverse: reverse}"></span>
+                </th>
+                <th>
+                    <a ng-click="Sort('Address2')">Address2</a>
+                    <span class="sortorder" ng-show="propertyName === 'Address2'" ng-class="{reverse: reverse}"></span>
+                </th>
+                <th>
+                    <a ng-click="Sort('City')">City</a>
+                    <span class="sortorder" ng-show="propertyName === 'City'" ng-class="{reverse: reverse}"></span>
+                </th>
                 <th></th>
                 <th></th>
                 <th></th>
             </tr>
-            <tr ng-repeat="custModel in ListCustomer">
+            <tr ng-repeat="custModel in ListCustomer | orderBy:propertyName:reverse">
                 <td>{{ custModel.Name }}</td>
                 <td>{{ custModel.Address1 }}</td>
                 <td>{{ custModel.Address2 }}</td>
                 <td>{{ custModel.City }}</td>
                 <td>
-                    <a href="#" ng-click="editUser(custModel.Id)" title="Edit Record" class="btn-primary glyphicon glyphicon-pencil">Edit</a>
+                    <button ng-click="editUser($index)" class="btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</button>
                 </td>
                 <td>
-                    <a href="#" ng-click="getDetails(custModel)" title="Details" class="btn-warning glyphicon glyphicon-align-justify">Details</a>
+                    <button ng-click="getDetails(custModel)" class="btn-warning"><span class="glyphicon glyphicon-align-justify"></span>Details</button>
+                    @*details partial view popup window to show the customer order details*@
+                    @*<div ng-view="Details"></div>*@
                 </td>
                 <td>
-                    <a href="#" ng-click="deleteCustomer(custModel)" title="Delete Record" class="btn-danger glyphicon glyphicon-trash">Delete</a>
+                    <button ng-click="deleteCustomer(custModel)" class="btn-danger"><span class="glyphicon glyphicon-trash"></span>Delete</button>
                 </td>
             </tr>
         </table>
+        <hr />
+        @*<div ng-show="det">
+            <h2>Customer Order Details</h2>
+            <p ng-show="!Details">Customer has No Order</p>
+                <ul>
+                    <li ng-repeat="x in Details">
+                        Customer Name:{{x.customerName | uppercase}}
+                        Order Date{{x.date}}
+                        Product Count:{{x.ProductCount}}
+                        <ul>
+                            <li ng-repeat="p in x.Products">
+                                Product Name:{{p.Name | uppercase}}
+                                Product Price:{{p.Price | currency}}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+        </div>*@
+        <div ng-show="det">
+            <h2>Customer Order Details</h2>
+            <p ng-show="!Details">Customer has No Order</p>
+                <div ng-repeat="x in Details">
+                    <h5>Customer Name:{{x.customerName | uppercase}}</h5>
+                    <h5>Order Date:{{x.date | date}}</h5>
+                    <h5>Product Count:{{x.ProductCount}}</h5>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Product Name:
+                            </th>
+                            <th>
+                                Product Price:
+                            </th>
+                        </tr>
+                        <tr ng-repeat="p in x.Products">
+                            <td>{{p.Name | uppercase}}</td>
+                            <td>{{p.Price | currency}}</td>
+                        </tr>
+                    </table>
+                </div>
+        </div>
+        @*<tt>Customers = {{ListCustomer}}</tt><br />*@
     </div>
 
 @section scripts

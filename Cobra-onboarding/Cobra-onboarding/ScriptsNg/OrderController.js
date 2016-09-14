@@ -1,41 +1,45 @@
-﻿angular.module('myApp', [])//['ngAnimate', 'ngSanitize', 'ui.bootstrap'])
-.controller('customersCtrl', function ($scope, $http) {
-    $scope.Customer = {};
-    $scope.custModel = {};
+﻿angular.module('myApp1', [])
+.controller('orderCtrl', function ($scope, $http,$filter) {
+    $scope.Order = {};
+    $scope.orderModel = {};
     $scope.message = '';
     $scope.result = "color-default";
     $scope.isViewLoading = false;
-    $scope.ListCustomer = null;
+    $scope.ListOrders = null;
     $scope.Details = null;
     $scope.edit = true;
     $scope.det = false;
     $scope.error = false;
     $scope.incomplete = false;
-    //$scope.animationsEnabled = true;
+    $scope.customers = {};
+    $scope.products = {},
     getallData();
+    getcustomerlist();
+    getproductlist();
 
-    $scope.editUser = function (id) {
+    $scope.editOrder = function (id) {
         if (id == 'new') {
             $scope.edit = true;
             $scope.incomplete = true;
-            $scope.Customer = {};
+            $scope.Order = {};
         } else {
             $scope.edit = false;
-            $scope.Customer.Id = $scope.ListCustomer[id].Id;
-            $scope.Customer.Name = $scope.ListCustomer[id].Name;
-            $scope.Customer.Address1 = $scope.ListCustomer[id].Address1;
-            $scope.Customer.Address2 = $scope.ListCustomer[id].Address2;
-            $scope.Customer.City = $scope.ListCustomer[id].City;
-            $scope.Customer.OrderHeaders = $scope.ListCustomer[id].OrderHeaders;
+            $scope.Order.OrderId = $scope.ListOrders[id].OrderId;
+            $scope.Order.DateTime = $scope.ListOrders[id].DateTime;
+            $scope.Order.person = {};
+            $scope.Order.person.PersonId = $scope.ListOrders[id].person.PersonId;
+            $scope.Order.person.Name = $scope.ListOrders[id].person.Name;
+            $scope.Order.products = [];
+            $scope.Order.products = $scope.ListOrders[id].products;
         }
     };
 
-    //******=========Get All Customer=========******
+    //******=========Get All Orders=========******
     function getallData() {
         //debugger;
-        $http.get('/Customer/GetAllData', { cache: false })
+        $http.get('/Order/GetAllData', { cache: false })
          .success(function (data, status, headers, config) {
-             $scope.ListCustomer = data;
+             $scope.ListOrders = data;
          })
          .error(function (data, status, headers, config) {
              $scope.message = 'Unexpected Error while loading data!!';
@@ -44,13 +48,12 @@
          });
     };
 
-    //******=========Get Single Customer=========******
-    $scope.getCustomer = function (custModel) {
-        $http.get('/Customer/GetbyID/' + custModel.Id)
+    //******=========Get Single Order=========******
+    function getcustomerlist() {
+        $http.get('/Order/GetCustomerList')
         .success(function (data, status, headers, config) {
             //debugger;
-            $scope.custModel = data;
-            getallData();
+            $scope.customers = data;
             console.log(data);
         })
        .error(function (data, status, headers, config) {
@@ -60,30 +63,42 @@
        });
     };
 
-    $scope.UpdateUser = function () {
-        if ($scope.edit)
-        {
-            $scope.CreateNewCustomer();
+    function getproductlist() {
+        $http.get('/Order/GetProductList')
+        .success(function (data, status, headers, config) {
+            //debugger;
+            $scope.products = data;
+            console.log(data);
+        })
+       .error(function (data, status, headers, config) {
+           $scope.message = 'Unexpected Error while loading data!!';
+           $scope.result = "color-red";
+           console.log($scope.message);
+       });
+    };
+
+    $scope.UpdateOrder = function () {
+        if ($scope.edit) {
+            $scope.CreateNewOrder();
         }
-        else
-        {
-            $scope.EditCustomer();
+        else {
+            $scope.EditOrder();
         }
     };
-    //******=========Create New Customer=========******
-    $scope.CreateNewCustomer = function () {
+    //******=========Create New Order=========******
+    $scope.CreateNewOrder = function () {
         $scope.isViewLoading = true;
         $http({
             method: 'POST',
-            url: '/Customer/Insert',
-            data: $scope.Customer
+            url: '/Order/Insert',
+            data: $scope.Order
         }).success(function (data, status, headers, config) {
             if (data.success === true) {
                 $scope.message = 'Form data Saved!';
                 $scope.result = "color-green";
                 getallData();
-                //$scope.ListCustomer.push($scope.Customer);
-                $scope.Customer = {};
+                //$scope.ListOrders.push($scope.Order);
+                $scope.Order = {};
                 console.log(data);
             }
             else {
@@ -98,17 +113,17 @@
         //getallData();
         $scope.isViewLoading = false;
     };
-    //******=========Edit Customer=========******
-    $scope.EditCustomer = function () {
+    //******=========Edit Order=========******
+    $scope.EditOrder = function () {
         //debugger;
         $scope.isViewLoading = true;
         $http({
             method: 'POST',
-            url: '/Customer/Update',
-            data: $scope.Customer
+            url: '/Order/Update',
+            data: $scope.Order
         }).success(function (data, status, headers, config) {
             if (data.success === true) {
-                $scope.Customer = {};
+                $scope.Order = {};
                 $scope.message = 'Form data Updated!';
                 $scope.result = "color-green";
                 getallData();
@@ -126,12 +141,11 @@
         $scope.isViewLoading = false;
     };
 
-    //******=========Get The Customer Details=========******
-    $scope.getDetails = function (custModel) {       
+    //******=========Get The Order Details=========******
+    $scope.getDetails = function (orderModel) {
         //debugger;
         $scope.det = false;
-        $scope.Details = null;
-        $http.get('/Customer/Details/' + custModel.Id, { cache: false })
+        $http.get('/Order/Details/' + orderModel.OrderId, { cache: false })
          .success(function (data, status, headers, config) {
              $scope.det = true;
              $scope.Details = data;
@@ -142,43 +156,23 @@
              console.log($scope.message);
          });
     };
-    //******=========Open the Customer Details popup win=========******
-    //$scope.open = function () {
-    //    var modalInstance = $uibModal.open({
-    //        animation: $ctrl.animationsEnabled,
-    //        ariaLabelledBy: 'modal-title',
-    //        ariaDescribedBy: 'modal-body',
-    //        templateUrl: 'Details.html',
-    //        controller: 'ModalInstanceCtrl',
-    //        controllerAs: '$ctrl',
-    //        resolve: {
-    //            Details: function () {
-    //                return $scope.Details;
-    //            }
-    //        }
-    //    });
-
-    //    $scope.cancel = function (){
-    //        $scope.dismiss({$value: 'cancel'});
-    //    };
-
-    //******=========Delete Customer=========******
-    $scope.deleteCustomer = function (custModel) {
+    //******=========Delete Order=========******
+    $scope.deleteOrder = function (orderModel) {
         //debugger;
-        var IsConf = confirm('You are about to delete ' + custModel.Name + '. Are you sure?');
+        var IsConf = confirm('You are about to delete ' + orderModel.person.Name + '. Are you sure?');
         if (IsConf) {
             $http({
                 method: 'POST',
-                url: '/Customer/Delete',
-                data: custModel
+                url: '/Order/Delete',
+                data: orderModel
             })
            .success(function (data, status, headers, config) {
                if (data.success === true) {
-                   $scope.message = custModel.Name + ' deleted from record!!';
+                   $scope.message = orderModel.person.Name + ' deleted from record!!';
                    $scope.result = "color-green";
                    //getallData();
-                   var index = $scope.ListCustomer.indexOf(custModel);
-                   $scope.ListCustomer.splice(index,1);
+                   var index = $scope.ListOrders.indexOf(orderModel);
+                   $scope.ListOrders.splice(index, 1);
                    console.log(data);
                }
                else {
@@ -203,16 +197,3 @@
 .config(function ($locationProvider) {
     $locationProvider.html5Mode(true);
 });
-//.config(function ($locationProvider,$routeProvider) {
-//    $locationProvider.html5Mode(true);
-//    $routeProvider
-//    .when("/", {
-//        controller: 'customersCtrl',
-//        templateUrl: "Index.cshtml",
-//    })
-//    .when('/Details', {
-//        controller: 'customersCtrl',
-//        templateUrl: 'Particals/Details.html'
-//    })
-//    .otherwise({ redirectTo: '/' });
-//});

@@ -56,6 +56,7 @@ namespace Cobra_onboarding.Controllers
             {
                 db.People.Add(person);
                 db.SaveChanges();
+                status = true;
                 return Json(new { success = status });
             }
             return Json(new
@@ -70,10 +71,17 @@ namespace Cobra_onboarding.Controllers
         public JsonResult Update(Person person)
         {
             bool status = false;
+            Person p = db.People.Find(person.Id);
+            p.Name = person.Name;
+            p.Address1 = person.Address1;
+            p.Address2 = person.Address2;
+            p.City = person.City;
+
             if (ModelState.IsValid)
             {
-                db.Entry(person).State = EntityState.Modified;
+                db.Entry(p).State = EntityState.Modified;
                 db.SaveChanges();
+                status = true;
                 return Json(new { success = status });
             }
             return Json(new
@@ -84,14 +92,46 @@ namespace Cobra_onboarding.Controllers
         }
 
         // DELETE: Delete Customer
-        [HttpDelete]
-        public JsonResult Delete(int id)
+        [HttpPost]
+        public JsonResult Delete(Person person)
         {
             bool status = false;
-            Person person = db.People.Find(id);
+            if (person == null)
+            {
+                return Json(new
+                {
+                    success = status
+                });
+            }
+            Person P = db.People.Find(person.Id);
+
+            if (P == null)
+            {
+                return Json(new
+                {
+                    success = status
+                });
+            }
             //remove the orderdetails
+            var ods = from o in db.OrderHeaders.Where(x => x.PersonId == person.Id)
+                        from od in o.OrderDetails
+                        select od;
+
+            foreach(var item in ods)
+            {
+              db.OrderDetails.Remove(item);
+            }
+
             //remove the orderheader
-            db.People.Remove(person);
+            var ohs = from o in db.OrderHeaders.Where(x => x.PersonId == person.Id)
+                      select o;
+            foreach (var item in ohs)
+            {
+                db.OrderHeaders.Remove(item);
+            }
+
+            //remove the customer
+            db.People.Remove(P);
             db.SaveChanges();
             status = true;
             return Json(new
@@ -105,19 +145,20 @@ namespace Cobra_onboarding.Controllers
         [HttpGet]
         public JsonResult Details(int? id)
         {
-            Person person = db.People.Find(id);
-            var ordertotal = ((from o in db.OrderHeaders.Where(x => x.PersonId == id)
+            Person P = db.People.Find(id);
+            var ordertotal = (from o in db.OrderHeaders.Where(x => x.PersonId == id)
                               select new
                               {
                                   order = o,
                                   orderdetails = o.OrderDetails,
                               }).GroupBy(x => x.order).Select(g => new OrderDetailViewModel
-                              (){
-                                  customerName = person.Name,
-                                  date = g.Key.OrderDate,
+                              ()
+                              {
+                                  customerName = P.Name,
+                                  date = g.Key.OrderDate.ToString(),
                                   ProductCount = g.Key.OrderDetails.Select(S => S.Product.Id).Count(),
-                                  Products = g.Key.OrderDetails.Select( p => p.Product).ToList(),
-                              })).ToList();
+                                  Products = g.Key.OrderDetails.Select(x => new ProductViewModel1 { Name = x.Product.Name, Price = x.Product.Price }).ToList(),
+                              });
             return Json(ordertotal,JsonRequestBehavior.AllowGet);
         }
 

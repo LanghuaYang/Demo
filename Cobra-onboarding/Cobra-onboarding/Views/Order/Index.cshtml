@@ -4,36 +4,95 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div ng-app="myApp1" class="ng-cloak" ng-controller="orderCtrl">
+    <hr>
+    <button class="btn btn-success" ng-click="editOrder('new')">
+        <span class="glyphicon glyphicon-pencil"></span>Create New
+    </button>
+    <hr>
+    <h3 ng-show="edit">Create New:</h3>
+    <h3 ng-hide="edit">Edit Order:</h3>
+    <form name="frmOder" novalidate>
+        <div>
+            <label>Order Date</label>
+            <input type="datetime-local" ng-model="Order.DateTime" placeholder="" required" />
+        </div>
+        <div>
+            <label>Person</label>
+            <select ng-options="x.Name for x in customers track by x.PersonId" ng-model="Order.person" required></select>
+        </div>
+        <div>
+            <label>Product</label>
+            <select ng-options="x.Name for x in products track by x.Id" ng-model="Order.products" required multiple></select>
+        </div>
+        <div class="btn">
+            <button class="btn btn-success" ng-click="UpdateOrder()">
+                <span class="glyphicon glyphicon-save"></span>Update Order
+            </button>
+        </div>
+    </form>
+    <hr />
+    @*<tt>option = {{Order}}</tt><br />*@
+    @*<tt>products = {{products}}</tt><br />*@
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Person.Name)
-        </th>
-        <th></th>
-    </tr>
+    <h2>All Orders</h2>
+    <table class="table">
+        <tr>
+            <th>
+                <a ng-click="Sort('DateTime')">DateTime</a>
+                <span class="sortorder" ng-show="propertyName === 'DateTime'" ng-class="{reverse: reverse}"></span>
+            </th>
+            <th>
+                <a ng-click="Sort('Name')">Customer Name</a>
+                <span class="sortorder" ng-show="propertyName === 'Name'" ng-class="{reverse: reverse}"></span>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="orderModel in ListOrders | orderBy:propertyName:reverse">
+            <td>{{ orderModel.DateTime | date}}</td>
+            <td>{{ orderModel.person.Name | uppercase}}</td>
+            <td>
+                <button ng-click="editOrder($index)" class="btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</button>
+            </td>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Person.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.OrderId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.OrderId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.OrderId })
-        </td>
-    </tr>
+            <td>
+                <button ng-click="getDetails(orderModel)" class="btn-warning"><span class="glyphicon glyphicon-align-justify"></span>Details</button>
+            </td>
+           
+            <td>
+                <button ng-click="deleteOrder(orderModel)" class="btn-danger"><span class="glyphicon glyphicon-trash"></span>Delete</button>
+            </td>
+        </tr>
+    </table>
+    <div ng-show="det">
+        <h2>Order Details</h2>
+        <div ng-repeat="x in Details">
+            <h5>Customer Name:{{x.customerName | uppercase}}</h5>
+            <h5>Order Date:{{x.date | date}}</h5>
+            <h5>Product Count:{{x.ProductCount}}</h5>
+            <table class="table">
+                <tr>
+                    <th>
+                        Product Name:
+                    </th>
+                    <th>
+                        Product Price:
+                    </th>
+                </tr>
+                <tr ng-repeat="p in x.Products">
+                    <td>{{p.Name | uppercase}}</td>
+                    <td>{{p.Price | currency}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    @*<tt>Orders = {{ListOrders}}</tt><br />*@
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/ScriptsNg/OrderController.js"></script>
 }
-
-</table>

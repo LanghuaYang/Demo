@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Cobra_onboarding;
+using Cobra_onboarding.Models;
 
 namespace Cobra_onboarding.Controllers
 {
@@ -17,107 +18,197 @@ namespace Cobra_onboarding.Controllers
         // GET: Order
         public ActionResult Index()
         {
-            var orderHeaders = db.OrderHeaders.Include(o => o.Person);
-            return View(orderHeaders.ToList());
-        }
-
-        // GET: Order/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            OrderHeader orderHeader = db.OrderHeaders.Find(id);
-            if (orderHeader == null)
-            {
-                return HttpNotFound();
-            }
-            return View(orderHeader);
-        }
-
-        // GET: Order/Create
-        public ActionResult Create()
-        {
-            ViewBag.PersonId = new SelectList(db.People, "Id", "Name");
             return View();
         }
 
-        // POST: Order/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrderId,OrderDate,PersonId")] OrderHeader orderHeader)
+        [HttpGet]
+        public JsonResult GetAllData()
         {
+                        //var orders = from o in db.OrderHeaders.Include(o => o.Person)
+                        // select new OrderViewModel
+                        // {
+                        //     OrderId = o.OrderId,
+                        //     DateTime = o.OrderDate.ToString(),
+                        //     person = new PersonViewModel { PersonId = o.PersonId, Name = o.Person.Name }
+                        // };
+
+            var orders = (from o in db.OrderHeaders.Include("OrderDetails")
+                            from d in o.OrderDetails
+                            select new
+                            {
+                                order = o,
+                                products = d.Product
+                            }).GroupBy(x => x.order).Select(x => new OrderViewModel
+                            {
+                                OrderId = x.Key.OrderId,
+                                DateTime = x.Key.OrderDate.ToString(),
+                                person = new PersonViewModel { PersonId = x.Key.PersonId, Name = x.Key.Person.Name },
+                                //Count = x.Where(g => g.products != null).Distinct().Count()
+                                products = x.GroupBy(g => g.products).Select(p => new ProductViewModel
+                                {
+                                    Id = p.Key.Id,
+                                    Name = p.Key.Name,
+                                    count = p.Distinct().Count()
+                                }).ToList()
+                            }).ToList();
+            return Json(orders, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetCustomerList()
+        {
+            var Names =  from p in db.People
+                         select new PersonViewModel
+                         {
+                             PersonId = p.Id,
+                                Name = p.Name
+                          };
+            return Json(Names, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetProductList()
+        {
+            var Products = from p in db.Products
+                        select new ProductViewModel
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            count = 1
+                        };
+            return Json(Products, JsonRequestBehavior.AllowGet);
+        }
+        
+
+        // POST: Save New Customer
+        [HttpPost]
+        public JsonResult Insert(OrderViewModel order)
+        {
+            bool status = false;
             if (ModelState.IsValid)
             {
+                var orderHeader = new OrderHeader {
+                    OrderDate = DateTime.Parse(order.DateTime),
+                    Person = db.People.Single(x => x.Id == order.person.PersonId),
+                    PersonId = order.person.PersonId,
+                    };
+
+                //also need to save the orderdetails based on the products you choose
+                foreach (var p in order.products)
+                {
+                    OrderDetail od = new OrderDetail
+                    {
+                        OrderHeader = orderHeader,
+                        Product = db.Products.Single(x => x.Name == p.Name)
+                    };
+                    orderHeader.OrderDetails.Add(od);
+                }
+
                 db.OrderHeaders.Add(orderHeader);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = status });
             }
-
-            ViewBag.PersonId = new SelectList(db.People, "Id", "Name", orderHeader.PersonId);
-            return View(orderHeader);
+            return Json(new
+            {
+                success = false,
+                errors = ModelState.Keys.SelectMany(i => ModelState[i].Errors).Select(m => m.ErrorMessage).ToArray()
+            });
         }
 
-        // GET: Order/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            OrderHeader orderHeader = db.OrderHeaders.Find(id);
-            if (orderHeader == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.PersonId = new SelectList(db.People, "Id", "Name", orderHeader.PersonId);
-            return View(orderHeader);
-        }
-
-        // POST: Order/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Update Existing Customer
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderId,OrderDate,PersonId")] OrderHeader orderHeader)
+        public JsonResult Update(OrderViewModel order)
         {
+            bool status = false;
+            var orderHeader = db.OrderHeaders.Find(order.OrderId);
+            orderHeader.OrderDate = DateTime.Parse(order.DateTime);
+            orderHeader.Person = db.People.Find(order.person.PersonId);
+            //orderHeader.PersonId = order.person.PersonId;
+
+
+            //also need to save the orderdetails based on the products you choose
+            foreach (var p in order.products)
+            {
+                OrderDetail od = new OrderDetail
+                {
+                    OrderHeader = orderHeader,
+                    Product = db.Products.SingleOrDefault(x => x.Name == p.Name)
+                };
+                db.OrderDetails.Add(od);
+                orderHeader.OrderDetails.Add(od);
+            }
+
+            //also need to save the orderdetails based on the products you choose
             if (ModelState.IsValid)
             {
                 db.Entry(orderHeader).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = status });
             }
-            ViewBag.PersonId = new SelectList(db.People, "Id", "Name", orderHeader.PersonId);
-            return View(orderHeader);
+            return Json(new
+            {
+                success = false,
+                errors = ModelState.Keys.SelectMany(i => ModelState[i].Errors).Select(m => m.ErrorMessage).ToArray()
+            });
         }
 
-        // GET: Order/Delete/5
-        public ActionResult Delete(int? id)
+        // DELETE: Delete Customer
+        [HttpPost]
+        public JsonResult Delete(OrderViewModel order)
         {
-            if (id == null)
+            bool status = false;
+            if (order == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new
+                {
+                    success = status
+                });
             }
-            OrderHeader orderHeader = db.OrderHeaders.Find(id);
+            OrderHeader orderHeader = db.OrderHeaders.Find(order.OrderId);
             if (orderHeader == null)
             {
-                return HttpNotFound();
+                return Json(new
+                {
+                    success = status
+                });
             }
-            return View(orderHeader);
-        }
 
-        // POST: Order/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            OrderHeader orderHeader = db.OrderHeaders.Find(id);
+            //remove the orderdetails
+            var ods = from o in db.OrderHeaders.Where(x => x.OrderId == order.OrderId)
+                      from od in o.OrderDetails
+                      select od;
+            foreach (var item in ods)
+            {
+                db.OrderDetails.Remove(item);
+            }
+            //remove the order
             db.OrderHeaders.Remove(orderHeader);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            status = true;
+            return Json(new
+            {
+                success = status
+            });
+        }
+
+        // GET: Customer/Details/5
+        [HttpGet]
+        public JsonResult Details(int? id)
+        {
+            var ordertotal = (from o in db.OrderHeaders.Where(x => x.OrderId == id)
+                              select new
+                              {
+                                  order = o,
+                                  orderdetails = o.OrderDetails,
+                              }).GroupBy(x => x.order).Select(g => new OrderDetailViewModel
+                              ()
+                              {
+                                  customerName = g.Key.Person.Name,
+                                  date = g.Key.OrderDate.ToString(),
+                                  ProductCount = g.Key.OrderDetails.Select(S => S.Product.Id).Count(),
+                                  Products = g.Key.OrderDetails.Select(x => new ProductViewModel1 { Name = x.Product.Name, Price = x.Product.Price }).ToList(),
+                              });
+            return Json(ordertotal, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
