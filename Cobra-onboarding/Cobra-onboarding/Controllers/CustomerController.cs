@@ -57,7 +57,7 @@ namespace Cobra_onboarding.Controllers
                 db.People.Add(person);
                 db.SaveChanges();
                 status = true;
-                return Json(new { success = status });
+                return Json(new { success = status, Id = person.Id});
             }
             return Json(new
             {

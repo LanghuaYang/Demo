@@ -106,7 +106,8 @@ namespace Cobra_onboarding.Controllers
 
                 db.OrderHeaders.Add(orderHeader);
                 db.SaveChanges();
-                return Json(new { success = status });
+                status = true;
+                return Json(new { success = status ,OrderId = orderHeader.OrderId});
             }
             return Json(new
             {
@@ -143,6 +144,7 @@ namespace Cobra_onboarding.Controllers
             {
                 db.Entry(orderHeader).State = EntityState.Modified;
                 db.SaveChanges();
+                status = true;
                 return Json(new { success = status });
             }
             return Json(new

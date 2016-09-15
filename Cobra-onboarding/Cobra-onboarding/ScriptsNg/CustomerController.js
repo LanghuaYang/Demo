@@ -1,5 +1,5 @@
 ﻿angular.module('myApp', [])//['ngAnimate', 'ngSanitize', 'ui.bootstrap'])
-.controller('customersCtrl', function ($scope, $http) {
+.controller('customersCtrl', function ($scope, $http, $filter) {
     $scope.Customer = {};
     $scope.custModel = {};
     $scope.message = '';
@@ -31,7 +31,7 @@
     };
 
     //******=========Get All Customer=========******
-    function getallData() {
+    function getallData(){
         //debugger;
         $http.get('/Customer/GetAllData', { cache: false })
          .success(function (data, status, headers, config) {
@@ -60,6 +60,7 @@
        });
     };
 
+    //******=========On-Click The Update Button function=========******
     $scope.UpdateUser = function () {
         if ($scope.edit)
         {
@@ -81,8 +82,10 @@
             if (data.success === true) {
                 $scope.message = 'Form data Saved!';
                 $scope.result = "color-green";
-                getallData();
-                //$scope.ListCustomer.push($scope.Customer);
+
+                //getallData();
+                $scope.Customer.Id = data.Id;
+                $scope.ListCustomer.push($scope.Customer);
                 $scope.Customer = {};
                 console.log(data);
             }
@@ -108,10 +111,15 @@
             data: $scope.Customer
         }).success(function (data, status, headers, config) {
             if (data.success === true) {
+                //refresh the list
+                var id2find = $scope.Customer.Id;
+                var founditem = $filter('filter')($scope.ListCustomer, { Id: id2find }, true)[0];
+                var index = $scope.ListCustomer.indexOf(founditem);
+                $scope.ListCustomer[index] = $scope.Customer;
                 $scope.Customer = {};
                 $scope.message = 'Form data Updated!';
                 $scope.result = "color-green";
-                getallData();
+                //getallData();
                 console.log(data);
             }
             else {

@@ -48,7 +48,7 @@
          });
     };
 
-    //******=========Get Single Order=========******
+    //******=========Get All The Customers=========******
     function getcustomerlist() {
         $http.get('/Order/GetCustomerList')
         .success(function (data, status, headers, config) {
@@ -62,7 +62,7 @@
            console.log($scope.message);
        });
     };
-
+    //******=========Get All The Products=========******
     function getproductlist() {
         $http.get('/Order/GetProductList')
         .success(function (data, status, headers, config) {
@@ -76,7 +76,7 @@
            console.log($scope.message);
        });
     };
-
+    //******=========On-Click The Update Button function=========******
     $scope.UpdateOrder = function () {
         if ($scope.edit) {
             $scope.CreateNewOrder();
@@ -96,8 +96,9 @@
             if (data.success === true) {
                 $scope.message = 'Form data Saved!';
                 $scope.result = "color-green";
-                getallData();
-                //$scope.ListOrders.push($scope.Order);
+                //getallData();
+                $scope.Order.OrderId = data.OrderId;
+                $scope.ListOrders.push($scope.Order);
                 $scope.Order = {};
                 console.log(data);
             }
@@ -123,10 +124,15 @@
             data: $scope.Order
         }).success(function (data, status, headers, config) {
             if (data.success === true) {
+                //refresh the list
+                var id2find = $scope.Order.OrderId;
+                var founditem = $filter('filter')($scope.ListOrders, { OrderId: id2find }, true)[0];
+                var index = $scope.ListOrders.indexOf(founditem);
+                $scope.ListOrders[index] = $scope.Order;
                 $scope.Order = {};
                 $scope.message = 'Form data Updated!';
                 $scope.result = "color-green";
-                getallData();
+                //getallData();
                 console.log(data);
             }
             else {
