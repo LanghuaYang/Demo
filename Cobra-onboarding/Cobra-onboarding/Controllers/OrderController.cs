@@ -89,8 +89,8 @@ namespace Cobra_onboarding.Controllers
             {
                 var orderHeader = new OrderHeader {
                     OrderDate = DateTime.Parse(order.DateTime),
-                    Person = db.People.Single(x => x.Id == order.person.PersonId),
-                    PersonId = order.person.PersonId,
+                    Person = db.People.SingleOrDefault(x => x.Id == order.person.PersonId),
+                    //PersonId = order.person.PersonId,
                     };
 
                 //also need to save the orderdetails based on the products you choose

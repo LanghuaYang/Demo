@@ -1,4 +1,4 @@
-﻿angular.module('myApp', [])//['ngAnimate', 'ngSanitize', 'ui.bootstrap'])
+﻿angular.module('myApp', [])
 .controller('customersCtrl', function ($scope, $http, $filter) {
     $scope.Customer = {};
     $scope.custModel = {};
@@ -11,7 +11,6 @@
     $scope.det = false;
     $scope.error = false;
     $scope.incomplete = false;
-    //$scope.animationsEnabled = true;
     getallData();
 
     $scope.editUser = function (id) {
@@ -150,26 +149,6 @@
              console.log($scope.message);
          });
     };
-    //******=========Open the Customer Details popup win=========******
-    //$scope.open = function () {
-    //    var modalInstance = $uibModal.open({
-    //        animation: $ctrl.animationsEnabled,
-    //        ariaLabelledBy: 'modal-title',
-    //        ariaDescribedBy: 'modal-body',
-    //        templateUrl: 'Details.html',
-    //        controller: 'ModalInstanceCtrl',
-    //        controllerAs: '$ctrl',
-    //        resolve: {
-    //            Details: function () {
-    //                return $scope.Details;
-    //            }
-    //        }
-    //    });
-
-    //    $scope.cancel = function (){
-    //        $scope.dismiss({$value: 'cancel'});
-    //    };
-
     //******=========Delete Customer=========******
     $scope.deleteCustomer = function (custModel) {
         //debugger;

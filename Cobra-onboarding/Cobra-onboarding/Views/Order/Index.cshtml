@@ -12,7 +12,7 @@
     <hr>
     <h3 ng-show="edit">Create New:</h3>
     <h3 ng-hide="edit">Edit Order:</h3>
-    <form name="frmOder" novalidate>
+    <form name="frmOder" ng-submit="UpdateOrder()">
         <div>
             <label>Order Date</label>
             <input type="datetime-local" ng-model="Order.DateTime" placeholder="" required" />
@@ -26,9 +26,10 @@
             <select ng-options="x.Name for x in products track by x.Id" ng-model="Order.products" required multiple></select>
         </div>
         <div class="btn">
-            <button class="btn btn-success" ng-click="UpdateOrder()">
-                <span class="glyphicon glyphicon-save"></span>Update Order
-            </button>
+            <input type="submit" value="Update Order" class="btn btn-success glyphicon glyphicon-save" ng-disabled="frmOder.$invalid" />
+            @*<button class="btn btn-success" ng-click="UpdateOrder()">
+                    <span class="glyphicon glyphicon-save"></span>Update Order
+                </button>*@
         </div>
     </form>
     <hr />

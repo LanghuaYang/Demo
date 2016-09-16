@@ -50,7 +50,7 @@
 
     //******=========Get All The Customers=========******
     function getcustomerlist() {
-        $http.get('/Order/GetCustomerList')
+        $http.get('/Order/GetCustomerList', { cache: false })
         .success(function (data, status, headers, config) {
             //debugger;
             $scope.customers = data;

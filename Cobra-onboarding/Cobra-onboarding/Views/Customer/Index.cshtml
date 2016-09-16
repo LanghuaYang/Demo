@@ -11,27 +11,29 @@
         <hr>
         <h3 ng-show="edit">Create New:</h3>
         <h3 ng-hide="edit">Edit User:</h3>
-        <form name="frmCustomer" novalidate>
+        <form name="frmCustomer" ng-submit="UpdateUser()">
             <div>
                 <label>Customer Name</label>
-                <input type="text" ng-model="Customer.Name"  name="cname" placeholder="" required ng-minlength="4" ng-maxlength="14" />
+                <input type="text" ng-model="Customer.Name" name="cname" placeholder="" required ng-minlength="4" ng-maxlength="14" />
             </div>
             <div>
                 <label>Address1</label>
-                <input type="text" ng-model="Customer.Address1"  name="address1" placeholder="" required />
+                <input type="text" ng-model="Customer.Address1" name="address1" placeholder="" required />
             </div>
             <div>
                 <label>Address2</label>
-                <input type="text" ng-model="Customer.Address2"  name="address2" placeholder="" />
+                <input type="text" ng-model="Customer.Address2" name="address2" placeholder="" />
             </div>
             <div>
                 <label>City</label>
-                <input type="text" ng-model="Customer.City"  name="city" placeholder="" required />
+                <input type="text" ng-model="Customer.City" name="city" placeholder="" required />
             </div>
             <div class="btn">
-                <button class="btn btn-success" ng-click="UpdateUser()"> @*ng-disabled="error || incomplete">*@
-                    <span class="glyphicon glyphicon-save"></span>Update User
-                </button>
+                <input type="submit" value="Update User" class="btn btn-success glyphicon glyphicon-save" ng-disabled="frmCustomer.$invalid" />
+                @*<button class="btn btn-success" ng-click="UpdateUser()">*@
+                    @*ng-disabled="error || incomplete">*@
+                    @*<span class="glyphicon glyphicon-save"></span>Update User*@
+                @*</button>*@
             </div>
         </form>
         <hr />
@@ -79,23 +81,6 @@
             </tr>
         </table>
         <hr />
-        @*<div ng-show="det">
-            <h2>Customer Order Details</h2>
-            <p ng-show="!Details">Customer has No Order</p>
-                <ul>
-                    <li ng-repeat="x in Details">
-                        Customer Name:{{x.customerName | uppercase}}
-                        Order Date{{x.date}}
-                        Product Count:{{x.ProductCount}}
-                        <ul>
-                            <li ng-repeat="p in x.Products">
-                                Product Name:{{p.Name | uppercase}}
-                                Product Price:{{p.Price | currency}}
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-        </div>*@
         <div ng-show="det">
             <h2>Customer Order Details</h2>
             <p ng-show="!Details">Customer has No Order</p>
