@@ -1,0 +1,80 @@
+ng-app
+<script src="angular.js"></script>
+model: ng-model
+data-binding:{{}}
+init:ng-init="name = ["s","m"]"
+iterator:ng-repeat="cust in customers" 
+filter:uppercase,lowercase,....
+
+cust in customers|filter:name(name can be a ng-model)|orderby:'city'('city' is a property in the cust(cust is an object))
+
+
+MVC PART:
+
+view controller scope
+
+scope is the glue between the view and controller.
+
+<body ng-controller="simplecontroller">
+
+<script src="angular.js"></script>
+<script>
+function simplecontroller($scope)
+{
+  //controller property and methods
+}
+</script>
+</body>
+
+Module,Route,Factories:
+
+Module
+Config
+Routes
+View ->$scope<-Controller
+Directive      *Factory		
+		Service
+		Provider
+		Value
+create a Module: var demoapp = angular.module("demoapp",[]);
+empty array stands for another module that demoapp depends on:dependency ijection
+var demoapp = angular.module("demoapp",['helpermodule']);
+
+create a Controller in a Module: 
+1,use a anonymouse function
+demoapp.controller("simplecontroller", function($scope){});
+2,use a function that defined before
+demoapp.controller("simplecontroller", simplecontroller);
+3,use a controllers object
+var controllers = {};
+controllers.simplecontroller = function($scope){};
+demoapp.controller(controllers);
+
+Routes: load different partial views based on a shell view
+demoapp.config(function($routeProvider){
+	$routeProvider
+		.when('/',		{
+			controller:'simplecontroller',
+			templateUrl:'Partials/View1.thml'
+		})
+		.when('/View2',
+		{
+			controller:'simplecontroller',
+			templateUrl:'Partials/View2.thml'
+		})
+		.otherwise({redirectTo:'/'});
+});
+how to use the route:
+跳转到另一个页面 而不是动态加载元素
+1, <a href = "#/View2">View 2</a>
+ng-view: when the value is "" then it stands for a place holder for a view
+<div ng-view=""></div>
+
+factory or service
+
+angular不会直接操作elements，要实现动态加载元素的效果，一般其实使用ng-show ng-hide
+
+
+
+
+

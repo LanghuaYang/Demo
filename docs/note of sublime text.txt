@@ -1,0 +1,88 @@
+sublime:
+
+1,goto anything 
+ctrl + shift + p  快速更改文件类型
+
+ctrl + p 快速查找并打开文件  如：wista/index.html
+
+ctrl + p 快速定位并边界 如：@body  可以快速定位到当前文件的body标签
+
+也可以把上面两个操作合二为一 如wista/index.css@body  可以快速打开index.css文件并找到body标签
+
+2,多行游标
+
+1、Ctrl+H ：查找替换
+
+2、Ctrl+D ：选择游标所在单词，连续Ctrl+D 实现多行选择（选择与第一次选择相同的单词）
+
+3、Ctrl+K Ctrl+D 跳过当前选择，选择下一个
+
+4、Ctrl+shift+D：复制游标所在行
+
+5、Alt+F3：选择所有与游标所在单词相同的单词
+
+6、按住shift键，然后按住鼠标右键向下拖动，也可产生多行游标
+
+3,command palette
+
+CTRL+SHIFT+P：启动命令模式｛切换语法模式：set syntax ｝
+
+4,emmet 插件
+1，安装插件 https://packagecontrol.io/installation，
+2，点击菜单Preference-->Package Control 点击Install Package 等待几秒后再弹出如下内容，敲键盘emmet
+在 Emmet 安装完成后，会显示如下屏幕：然后会自动安装PyV8，安装完成，重启 Sublime Text 3
+3，ctrl+shift+p打开命令，set syntax：html
+4，输入！，再ctrl+e,默认标签全部生成
+
+5,use emmet
+
+1, ul>.item$*10 +（ctrl+E）
+
+ > 号生成子元素 ，$ 产生序号，{ }产生内容
+
+2,生成的10个ul标签，在><选中后alt+f3，生成游标，回车后输入h2{}+ctrl2
+可以一次添加10个title
+
+6，其他快捷键
+1，ctrl+[ 减少缩进；ctrl+] 增加缩进
+2，从其他地方选中的代码在ctrl+v时，格式会乱，、ctrl+shift+v 保持缩进格式的粘贴
+
+7,安装其他theme
+1，preference->package control->install package->spacegrey->在打开的message文件中，选择spacegrey eight的配置信息，拷贝->打开preference中的setting-user，粘贴并保存，即可生效
+
+8,snippet
+1.切换语言格式，ctrl+shirt+p
+2.简化操作 ctrl+shirt+p 输入 snippet：function 自动生成function的基本结构！
+tab键 移动光标到下一个词
+自动补全功能，输入前几个英文字母，按enter 自动生成一段代码结构！
+3.输入前一个英文字母，按enter生成一段代码
+
+JavaScript snippets
+1.[ctrl+shift+P]+输入'pci'+输入'JavaScript Completions'
+2.输入'gi'，自动产生 getElementById
+
+JQuery snippets
+1.[ctrl+shift+P]+输入'pci'+输入'JQuery'
+2.输入'get'，自动产生 get请求
+3.输入'post'，自动产生 post请求
+
+Insert Callback
+1.[ctrl+shift+P]+输入'pci'+输入'Insert Callback'
+2.[alt+C]，自动产生 callBack function
+
+advanceNewFile
+1、安装advanceNewFile插件，ctrl+alt+n在该目录下创建文件或者命名文件；
+2、Ctrl+Alt+N输入文件名即可在当前文件夹下创建文件；
+3、Ctrl+Alt+N输入带路径的文件名即可在该路径下创建文件，如果路径不存在，便创建出该路径
+
+docblockker:快速完成注释
+
+jshint：使用lint进行语法及风格校验；jshint可以统一编码风格。
+
+如何在js中使用校验呢？步骤如下：
+1)ctrl+alt+n打开一个新文件--->切换到js语法模式--->如果用户在js文件上写上var x=123后面却没有分号的话，那么该行的左边就会有个黄色的圆点进行提示用户，这里需要加上分号。如果在js中定义一个数值，一个字符串，虽然这两个值相同，但是类型不同，一个数值型，另一个是字符串类型，所以要判断这两个变量是否相等就需要用到三等于了，但是如果我们不小心写少了一个等号的话，就很难察觉了，为了避免这种情况的发生，我们需要自定义校验，自定义校验的步骤如下：
+定义一个名称为.jshintrc的配置文件，该文件里面的内容是json格式的，内容如下：
+{
+"eqeqeq":true,//校验三等的情况
+"curly":true//校验if，for语法没有写花括号的情况
+}

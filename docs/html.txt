@@ -1,0 +1,61 @@
+1. <html></html>称为根标签，所有的网页标签都在<html></html>中。
+
+2. <head> 标签用于定义文档的头部，它是所有头部元素的容器。头部元素有<title>、<script>、 <style>、<link>、 <meta>等标签，头部标签在下一小节中会有详细介绍。
+
+3. 在<body>和</body>标签之间的内容是网页的主要内容，如<h1>、<p>、<a>、<img>等网页内容标签，在这里的标签中的内容会在浏览器中显示出来。
+
+<em>需要强调的文本</em>  斜体
+<strong>需要强调的文本</strong> 加粗
+<span>标签是没有语义的，它的作用就是为了设置单独的样式用的。<span style="color:blue">美国梦</span>
+<q>引用文本</q>,quote引用,显示为一个双引号引起来
+<blockquote>引用文本</blockquote>,浏览器对<blockquote>标签的解析是缩进样式
+<br>或者<br/> line break换行 是一个空标签，没有HTML内容的标签就是空标签，空标签只需要写一个开始标签，这样的标签有<br />、<hr />和<img />
+&nbsp; non-breaking space，显示为空格
+<hr>或者<hr />a thematic break，显示为一条横线
+<address>联系地址信息</address> 显示的样式为斜体
+<code> 适合显示一行代码
+<pre>Preformatted text: 块状的文本，适合显示代码段
+<ul> unordered list 不排序的列表
+<ol> ordered list 排序的列表
+<div> a division,一个块区，<div style="color:blue"></div>
+
+<table> 表格 summary相当于id
+<caption> 表格名称，居中显示
+<tbody> table body 全部load完后再显示
+<tr> table row
+<th> Header cells
+<td> Standard cells
+
+<a href=""> a hyperlink 链接 
+href是最主要的一个attribute，代表目标地址，未访问：下划线蓝色，访问后：下划线紫色
+target attribute，target="_blank"在新的浏览器窗口中打开
+
+<a>标签还有一个作用是可以链接Email地址，使用mailto能让访问者便捷向网站管理者发送电子邮件。如果mailto后面同时有多个参数的话，第一个参数必须以“?”开头，后面的参数每一个都以“&”分隔。
+<a href="mailto:ylh870721@163.com?Subject=hello,langhua&bcc=ylh870721@gmail.com&body=Hi Langhua,I'd like to contact you">联系作者</a>
+
+<img>
+1、src：标识图像的位置；
+2、alt：指定图像的描述性文本，当图像不可见时（下载不成功时），可看到该属性指定的文本；
+3、title：提供在图像可见时对图像的描述(鼠标滑过图片时显示的文本)；
+4,图像可以是GIF，PNG，JPEG格式的图像文件
+
+网站怎样与用户进行交互？答案是使用HTML表单(form)
+form可以包含的tag
+<input>，没有</input>,单独使用，type、name,value是常用的几个attributes，type可以是text，password，radio, checkbox，submit，reset,textarea等;name相当于id，value是显示的内容，如button显示的内容
+
+<textarea> rows，cols是常见的属性
+<button> <button type="button">Click Me!</button>
+<select> a drop-down list The <option> tags inside the <select> element define the available options in the list
+<option>
+<optgroup> The <optgroup> is used to group related options in a drop-down list.
+<fieldset> The <fieldset> tag draws a box around the related elements.
+<label for:"id">标签内容</label> for相当于id,当用户单击选中该label标签时，浏览器就会自动将焦点转到和标签相关的表单控件上
+
+	 <form method="post" action="save.php">
+	 	<label for="username">username：</label> 
+	 	<input type="text" name="username" id="username" value=""/><br>
+	 	<label for="pass">password:</label>
+	 	<input type="password" name="pass" id="pass" value=""/><br>
+	 	<input type="submit" name="submit" value="submit input message"/>
+	 	<input type="reset" name="reset" value="reset input message">
+	 </form>

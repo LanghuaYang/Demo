@@ -1,0 +1,21 @@
+Http://www.microsoft.com/en/us/default.aspx 无参数的一个网址
+
+Scheme://Host/AbsolutePath/Parameter
+
+Host事实上就是一个的IP地址，微软的IP是207.46.19.254，为了方便记忆，用更有意义的方式来寻找主机，这个IP就被改为了域名，即www.microsoft.com。IP地址和域名之间通过DNS(Domain Name Service)来进行映射
+
+浏览器和web服务器之间是应用层协议，HTTP/1.1，client和server通过request和response来完成一次session，每次session中双方发送的数据成为message
+应用层协议的内容需要通过传输层来传送，传输层协议是TCP/IP
+
+HttpApplication
+events PipeLine
+
+上传文件，enctype="multipart/form-data" type="file" 
+<form method="post" id="uploadfile" enctype="multipart/form-data">
+    <input type="file" name="upload1" id="upload1"/>
+</form>
+
+HttpBrowserCapabilities 获取浏览器信息
+
+(int x, string s) => s.Length > x
+() => SomeMethod()  使用空括号指定零个输入参数

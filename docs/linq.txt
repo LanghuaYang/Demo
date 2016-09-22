@@ -1,0 +1,360 @@
+filter：where a.Name == "langhua"
+
+join:
+cross join:
+        from c in categories 
+        join p in products on c equals p.Category 
+        select new { Category = c, p.ProductName }; 
+group join:
+        from c in categories 
+        join p in products on c equals p.Category into ps 
+        select new { Category = c, Products = ps };
+cross-group join:
+        from c in categories 
+        join p in products on c equals p.Category into ps 
+	from p in ps
+        select new { Category = c, p.ProductName};
+inner join:
+	   from a in db.TableAs
+           from b in a.TableBs
+           select new{A_Id=a.Id,a.Name, B_Id=b.Id,b.Price,...};
+left join:也被称为outer join
+        from c in categories 
+        join p in products on c equals p.Category into ps 
+        from p in ps.DefaultIfEmpty() 
+        select new { Category = c, ProductName = p == null ? "(No products)" : p.ProductName }; 
+
+投影projection：select 或者用Select SelectMany方法
+select new { p.ProductName, p.Category, Price = p.UnitPrice };  
+customers.SelectMany( (cust, custIndex) => cust.Orders.Select(o => "Customer #" + (custIndex + 1) + " has an order with OrderID " + o.OrderID)); 
+
+排序sorting：
+orderby:
+        from w in words 
+        orderby w.Length 
+        select w; 
+OrderByDescending:
+        from d in doubles 
+        orderby d descending 
+        select d; 
+
+thenby:
+    var sortedWords = 
+        words.OrderBy(a => a.Length) 
+             .ThenBy(a => a, new CaseInsensitiveComparer()); 
+ThenByDescending:
+    var sortedWords = 
+        words.OrderBy(a => a.Length) 
+             .ThenByDescending(a => a, new CaseInsensitiveComparer()); 
+Reverse:
+    var reversedIDigits = ( 
+        from d in digits 
+        where d[1] == 'i' 
+        select d) 
+        .Reverse(); 
+  
+Grouping:
+GroupBy:
+        int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+        var numberGroups = 
+            from n in numbers 
+            group n by n % 5 into g 
+            select new { Remainder = g.Key, Numbers = g }; 
+
+        string[] words = { "blueberry", "chimpanzee", "abacus", "banana", "apple", "cheese" }; 
+      
+        var wordGroups = 
+            from w in words 
+            group w by w[0] into g 
+            select new { FirstLetter = g.Key, Words = g }; 
+
+        List<Product> products = GetProductList(); 
+      
+        var orderGroups = 
+            from p in products 
+            group p by p.Category into g 
+            select new { Category = g.Key, Products = g }; 
+
+            var TotalStaff = (
+from s in db.Subjects
+from c in db.Classes.Where(j => j.SubjectId == s.SubjectId).DefaultIfEmpty()          from t in db.Teachers.Where(j => j.TeacherId == c.TeacherId).DefaultIfEmpty()  
+select new
+{
+	su = s,
+	te = t
+}).GroupBy(x => x.su).Select(x => new
+{
+	SubId = x.Key.SubjectId,
+	StaffCount = x.Where(g => g.te != null).Distinct().Count()
+});
+
+转换conversion：
+ToArray
+ToList
+ToDictionary
+OfType
+
+其他操作：
+concat：
+    int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 }; 
+    int[] numbersB = { 1, 3, 5, 7, 8 }; 
+  
+    var allNumbers = numbersA.Concat(numbersB);
+EqualAll：
+    var wordsA = new string[] { "cherry", "apple", "blueberry" }; 
+    var wordsB = new string[] { "cherry", "apple", "blueberry" }; 
+  
+    bool match = wordsA.SequenceEqual(wordsB); 
+
+aggregate聚合函数：
+Count()：
+    int[] factorsOf300 = { 2, 2, 3, 5, 5 };
+    factorsOf300.Distinct().Count(); 
+Count - Conditional：
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };   
+    int oddNumbers = numbers.Count(n => n % 2 == 1); 
+  
+    int uniqueFactors = factorsOf300.Distinct().Count(); 
+Count - Nested：
+    List<Customer> customers = GetCustomerList(); 
+    var orderCounts = 
+        from c in customers 
+        select new { c.CustomerID, OrderCount = c.Orders.Count() }; 
+Count - Grouped：
+    List<Product> products = GetProductList(); 
+    var categoryCounts = 
+        from p in products 
+        group p by p.Category into g 
+        select new { Category = g.Key, ProductCount = g.Count() }; 
+Sum - Simple;
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+  
+    double numSum = numbers.Sum(); 
+Sum - Projection:
+    string[] words = { "cherry", "apple", "blueberry" }; 
+  
+    double totalChars = words.Sum(w => w.Length); 
+Sum - Grouped:
+    var categories = 
+        from p in products 
+        group p by p.Category into g 
+        select new { Category = g.Key, TotalUnitsInStock = g.Sum(p => p.UnitsInStock) };
+Min - Simple:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+  
+    int minNum = numbers.Min();
+Min - Projection:
+    string[] words = { "cherry", "apple", "blueberry" }; 
+  
+    int shortestWord = words.Min(w => w.Length); 
+Min - Grouped:
+    var categories = 
+        from p in products 
+        group p by p.Category into g 
+        select new { Category = g.Key, CheapestPrice = g.Min(p => p.UnitPrice) }; 
+Min - Elements:
+        from p in products 
+        group p by p.Category into g 
+        let minPrice = g.Min(p => p.UnitPrice) 
+        select new { Category = g.Key, CheapestProducts = g.Where(p => p.UnitPrice == minPrice)
+Max - Simple:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+  
+    int maxNum = numbers.Max();
+Max - Projection:
+    string[] words = { "cherry", "apple", "blueberry" }; 
+  
+    int longestLength = words.Max(w => w.Length); 
+Max - Grouped:
+        from p in products 
+        group p by p.Category into g 
+        select new { Category = g.Key, MostExpensivePrice = g.Max(p => p.UnitPrice) }; 
+Max - Elements:
+        from p in products 
+        group p by p.Category into g 
+        let maxPrice = g.Max(p => p.UnitPrice) 
+        select new { Category = g.Key, MostExpensiveProducts = g.Where(p => p.UnitPrice == maxPrice) };
+Average - Simple:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+  
+    double averageNum = numbers.Average();
+Average - Projection:
+    string[] words = { "cherry", "apple", "blueberry" }; 
+  
+    double averageLength = words.Average(w => w.Length); 
+Average - Grouped:
+        from p in products 
+        group p by p.Category into g 
+        select new { Category = g.Key, AveragePrice = g.Average(p => p.UnitPrice) }; 
+
+
+Quantifier Operations:返回一个bool值
+Any - Simple:
+    string[] words = { "believe", "relief", "receipt", "field" }; 
+  
+    bool iAfterE = words.Any(w => w.Contains("ei")); 
+Any - Grouped:
+        from p in products 
+        group p by p.Category into g 
+        where g.Any(p => p.UnitsInStock == 0) 
+        select new { Category = g.Key, Products = g }; 
+All - Simple:
+    int[] numbers = { 1, 11, 3, 19, 41, 65, 19 }; 
+  
+    bool onlyOdd = numbers.All(n => n % 2 == 1); 
+All - Grouped:
+        from p in products 
+        group p by p.Category into g 
+        where g.All(p => p.UnitsInStock > 0) 
+        select new { Category = g.Key, Products = g }; 
+Contains-simple:
+    int[] numbers = { 1, 11, 3, 19, 41, 65, 19 }; 
+  
+    bool HasOdd = numbers.Contains(n => n % 2 == 1);
+Contains-Grouped:
+        from p in products 
+        group p by p.Category into g 
+        where g.Contains(p => p.UnitsInStock > 0) 
+        select new { Category = g.Key, Products = g }; 
+
+Partitioning operators:分层操作，返回指定数量的elements
+Take - Simple：
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+    var first3Numbers = numbers.Take(3); 
+Take - Nested:
+        (from c in customers 
+  
+        from o in c.Orders 
+  
+        where c.Region == "WA" 
+  
+        select new { c.CustomerID, o.OrderID, o.OrderDate }) .Take(3); 
+Skip - Simple:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+    var allButFirst4Numbers = numbers.Skip(4); 
+Skip - Nested:
+	(from c in customers 
+  
+        from o in c.Orders 
+  
+        where c.Region == "WA" 
+  
+        select new { c.CustomerID, o.OrderID, o.OrderDate }).Skip(2);
+
+TakeWhile - Simple:到第一个大于6的数时停止，即输出是5,4,1,3
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+    var firstNumbersLessThan6 = numbers.TakeWhile(n => n < 6); 
+
+TakeWhile - Indexed:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+    var firstSmallNumbers = numbers.TakeWhile((n, index) => n >= index); 
+
+SkipWhile - Simple:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+
+    var allButFirst3Numbers = numbers.SkipWhile(n => n % 3 != 0); 
+
+SkipWhile - Indexed:
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 }; 
+
+    var laterNumbers = numbers.SkipWhile((n, index) => n >= index); 
+
+Generator operators:
+Range:从100到149
+        from n in Enumerable.Range(100, 50) 
+  
+        select new { Number = n, OddEven = n % 2 == 1 ? "odd" : "even" }; 
+Repeat:产生一个数组{7,7,7,7,7,7,7,7,7,7}
+    	var numbers = Enumerable.Repeat(7, 10); 
+DefaultIfEmpty:
+DefaultIfEmpty回传的序列，其中若有项目是null，会用该项目类型的预设值填充，应用于outer join，也就是left join中，因为null无法作为输出值传输，会造成NullReferenceException 
+	From a in TableA join b in TableB
+	On a.cloumn_name = b.column_name Into JoinGroup
+	From g in JoinGroup.DefaultIfEmpty()
+	Select column_name(s) 
+
+Set Operators:
+Distinct - 1:remove the duplicated elements
+    int[] factorsOf300 = { 2, 2, 3, 5, 5 }; 
+  
+    var uniqueFactors = factorsOf300.Distinct(); 
+Distinct - 2:
+        from p in products 
+        select p.Category) 
+        .Distinct();
+
+Union - 1: create one sequence that contains the unique values from both arrays
+    int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 }; 
+    int[] numbersB = { 1, 3, 5, 7, 8 }; 
+  
+    var uniqueNumbers = numbersA.Union(numbersB);
+Union - 2:
+    var productFirstChars = 
+        from p in products 
+        select p.ProductName[0]; 
+    var customerFirstChars = 
+        from c in customers 
+        select c.CompanyName[0]; 
+  
+    var uniqueFirstChars = productFirstChars.Union(customerFirstChars);
+
+Intersect - 1:create one sequence that contains the common values shared by both arrays.
+    int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 }; 
+    int[] numbersB = { 1, 3, 5, 7, 8 }; 
+  
+    var commonNumbers = numbersA.Intersect(numbersB);
+Intersect - 2:
+    var productFirstChars = 
+        from p in products 
+        select p.ProductName[0]; 
+    var customerFirstChars = 
+        from c in customers 
+        select c.CompanyName[0]; 
+  
+    var commonFirstChars = productFirstChars.Intersect(customerFirstChars);
+
+Except - 1:create a sequence that contains the values from numbersA that are not also in numbersB.
+    int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 }; 
+    int[] numbersB = { 1, 3, 5, 7, 8 }; 
+  
+    IEnumerable<int> aOnlyNumbers = numbersA.Except(numbersB);
+Except - 2:
+    var productFirstChars = 
+        from p in products 
+        select p.ProductName[0]; 
+    var customerFirstChars = 
+        from c in customers 
+        select c.CompanyName[0]; 
+  
+    var productOnlyFirstChars = productFirstChars.Except(customerFirstChars);
+
+Element Operators:返回单一element
+First - Simple:
+	(from p in products 
+        where p.ProductID == 12 
+        select p) 
+        .First();
+First - Condition:
+    string[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" }; 
+  
+    string startsWithO = strings.First(s => s[0] == 'o'); 
+
+FirstOrDefault:
+try to return the first element of the sequence, unless there are no elements, in which case the default value for that type is returned.
+    int[] numbers = { }; 
+  
+    int firstNumOrDefault = numbers.FirstOrDefault(); 
+FirstOrDefault - Condition
+
+    Product product789 = products.FirstOrDefault(p => p.ProductID == 789); 
+
+SingleOrDefault:预先知道结果只有一个用SingleOrDefault，若知道结果有可能不只一个，但是只想要第一个，就用FirstOrDefault
+Returns the only element of a sequence, or a default value if the sequence is empty; 
+this method throws an exception if there is more than one element in the sequence.
+	var someCust = db.Customers.SingleOrDefault(c=>c.ID == 5);
+  
+ 
+ 
+
+  
+
