@@ -224,6 +224,7 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="ScriptsNg\CustomerController.js" />
+    <Content Include="ScriptsNg\ModalTest.js" />
     <Content Include="ScriptsNg\OrderController.js" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />

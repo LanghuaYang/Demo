@@ -15,10 +15,15 @@ namespace Cobra_onboarding.Controllers
         private CobraDBContext db = new CobraDBContext();
 
         // GET: OrderDetail
+        //public ActionResult Index()
+        //{
+        //    var orderDetails = db.OrderDetails.Include(o => o.OrderHeader).Include(o => o.Product);
+        //    return View(orderDetails.ToList());
+        //}
+
         public ActionResult Index()
         {
-            var orderDetails = db.OrderDetails.Include(o => o.OrderHeader).Include(o => o.Product);
-            return View(orderDetails.ToList());
+            return View();
         }
 
         // GET: OrderDetail/Details/5
